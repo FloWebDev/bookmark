@@ -13,7 +13,12 @@
 
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+        <div class="container">
+            <div class="row col-12">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
 
 
     <script src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
