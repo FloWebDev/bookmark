@@ -29,3 +29,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # KnpMenuBundle 
+    # https://symfony.com/doc/current/bundles/KnpMenuBundle/index.html
+    # https://stackoverflow.com/questions/59736410/symfony-5-0-and-knpmenubundle-how-to-configure
+    # https://symfony.com/doc/current/bundles/KnpMenuBundle/menu_builder_service.html
+    app.menu_builder:
+        class: App\Menu\MenuBuilder
+        arguments: ["@knp_menu.factory"]
+        tags:
+            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } # The alias is what is used to retrieve the menu
