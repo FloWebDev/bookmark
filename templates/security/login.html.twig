@@ -3,7 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post" class="col-12" novalidate>
+<form method="post" class="col-10 col-md-4 mx-auto mt-5 p-0" novalidate>
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -14,16 +14,16 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername">Username</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
+    <h1 class="h3 mb-3 font-weight-normal"><i class="fas fa-user-astronaut"></i> Connexion</h1>
+    <label for="inputUsername">Identifiant</label>
+    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control mb-3" required autofocus>
+    <label for="inputPassword">Mot de passe</label>
+    <input type="password" name="password" id="inputPassword" class="form-control mb-3" required>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
-
+    
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
         See https://symfony.com/doc/current/security/remember_me.html
@@ -35,6 +35,6 @@
         </div>
     #}
 
-    <input class="btn btn-lg btn-primary" type="submit" value="valider">
+    <input class="btn btn-lg btn-dark mx-auto" type="submit" value="valider">
 </form>
 {% endblock %}
