@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ListingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +28,27 @@ class Listing
      * @ORM\Column(type="integer")
      */
     private $z;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="listings")
+     */
+    private $page;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="listing")
+     */
+    private $items;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+        $this->items      = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,6 +75,60 @@ class Listing
     public function setZ(int $z): self
     {
         $this->z = $z;
+
+        return $this;
+    }
+
+    public function getPage(): ?Page
+    {
+        return $this->page;
+    }
+
+    public function setPage(?Page $page): self
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setListing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getListing() === $this) {
+                $item->setListing(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
