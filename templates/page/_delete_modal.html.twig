@@ -1,0 +1,29 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#deleteModal">
+  <i class="fas fa-trash-alt"></i>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pageDeleteModalLabel">Suppression de la Page "{{ page.title }}"</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Attention : </b><br>
+        La suppression d'une page entraîne la suppression de toutes les listes et items associés.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <form method="post" action="{{ path('page_delete', {'id': page.id}) }}">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ page.id) }}">
+          <button class="btn btn-danger">Supprimer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

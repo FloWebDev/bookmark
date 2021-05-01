@@ -7,6 +7,9 @@
     <link rel="shortcut icon" href="{{ asset('assets/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('lib/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('lib/fontawesome/css/all.min.css') }}">
+    {% if app.user %}
+        <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
+    {% endif %}
     <title>BookMark</title>
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
@@ -17,10 +20,12 @@
     <body>
 
         <div class="container">
+            {% if app.user %}
             <div class="row col-12">
                 {# Menu #}
                 {{ knp_menu_render('main', {'template' : 'menu/custom_knp_menu.html.twig'}) }}
             </div>
+            {% endif %}
             <div class="row col-12">
                 {# Content #}
                 {% block body %}{% endblock %}
