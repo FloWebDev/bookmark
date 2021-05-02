@@ -29,6 +29,7 @@ class AppFixtures extends Fixture
         $admin->setEmail('admin@admin.io');
         $manager->persist($admin);
 
+        // POUR ADMIN
         // Création d'un utilisateur
         $user = new User();
         $user->setUsername('user');
@@ -47,11 +48,11 @@ class AppFixtures extends Fixture
             $manager->persist($page);
             $pages[] = $page;
         }
-        shuffle($pages);
 
         // Création des listes
         $lists = [];
         for ($i = 0; $i < 15; $i++) {
+            shuffle($pages);
             $list = new Listing();
             $list->setTitle('Liste n° ' . $i + 1);
             $list->setZ($i + 1);
@@ -59,10 +60,10 @@ class AppFixtures extends Fixture
             $manager->persist($list);
             $lists[] = $list;
         }
-        shuffle($lists);
 
         // Création des items
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 150; $i++) {
+            shuffle($lists);
             $item = new Item();
             $item->setTitle('Item n° ' . $i + 1);
             $item->setUrl('https://www.google.com/');
@@ -70,6 +71,42 @@ class AppFixtures extends Fixture
             $item->setListing($lists[0]);
             $manager->persist($item);
         }
+
+        // POUR USER
+        // Création d'un utilisateur
+        $pages = [];
+        for ($i = 0; $i < 3; $i++) {
+            $page = new Page();
+            $page->setTitle('Page n° ' . $i + 1);
+            $page->setZ($i + 1);
+            $page->setUser($user);
+            $manager->persist($page);
+            $pages[] = $page;
+        }
+
+        // Création des listes
+        $lists = [];
+        for ($i = 0; $i < 15; $i++) {
+            shuffle($pages);
+            $list = new Listing();
+            $list->setTitle('Liste n° ' . $i + 1);
+            $list->setZ($i + 1);
+            $list->setPage($pages[0]);
+            $manager->persist($list);
+            $lists[] = $list;
+        }
+
+        // Création des items
+        for ($i = 0; $i < 150; $i++) {
+            shuffle($lists);
+            $item = new Item();
+            $item->setTitle('Item n° ' . $i + 1);
+            $item->setUrl('https://www.google.com/');
+            $item->setZ($i + 1);
+            $item->setListing($lists[0]);
+            $manager->persist($item);
+        }
+
 
         $manager->flush();
     }

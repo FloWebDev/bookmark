@@ -16,8 +16,9 @@ class PageController extends AbstractController
     #[Route('/', name: 'page_index', methods: ['GET'])]
     public function index(PageRepository $pageRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('page/index.html.twig', [
-            'pages' => $pageRepository->findAll(),
+            'pages' => $pageRepository->findByUser($this->getUser()),
         ]);
     }
 
@@ -71,11 +72,24 @@ class PageController extends AbstractController
     #[Route('/{id}', name: 'page_delete', methods: ['POST'])]
     public function delete(Request $request, Page $page): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->getUser()->getId() !== $page->getUser()->getId()) {
+            $this->addFlash(
+                'danger',
+                'Unauthorized'
+            );
+            return $this->redirectToRoute('page_index');
+        }
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);
             $entityManager->flush();
         }
+
+        $this->addFlash(
+            'success',
+            'Action réalisée avec succès'
+        );
 
         return $this->redirectToRoute('page_index');
     }

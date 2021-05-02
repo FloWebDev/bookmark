@@ -27,6 +27,16 @@
             </div>
             {% endif %}
             <div class="row col-12">
+                {# read and display all flash messages #}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} mx-auto" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="row col-12">
                 {# Content #}
                 {% block body %}{% endblock %}
             </div>

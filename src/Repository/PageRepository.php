@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Page;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,20 @@ class PageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Page::class);
+    }
+
+    /**
+    * @return Page[] Returns an array of Page objects
+    */
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.z', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**
