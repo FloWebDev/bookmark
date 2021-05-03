@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block body %}
-    <h1>Page</h1>
+    <h1 class="col-12">{{ page.title }}</h1>
 
-    <table class="table">
+    {#<table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -24,11 +24,107 @@
                 <td>{{ page.createdAt ? page.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
-    </table>
+    </table>#}
 
-    <a href="{{ path('page_index') }}">back to list</a>
+    <div class="row col-12 flex-nowrap" id="listContainer">
 
-    <a href="{{ path('page_edit', {'id': page.id}) }}">edit</a>
+        <div class="col-3">
+            <p class="font-weight-bold text-center my-2">Titre de la liste</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Cras justo odio</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Dapibus ac facilisis in</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Morbi leo risus</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+            </ul>
+        </div>
 
-    {{ include('page/_delete_form.html.twig') }}
+        <div class="col-3">
+            <p class="font-weight-bold text-center my-2">Titre de la liste</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Cras justo odio</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Dapibus ac facilisis in</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Morbi leo risus</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-3">
+            <p class="font-weight-bold text-center my-2">Titre de la liste</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Cras justo odio</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Dapibus ac facilisis in</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Morbi leo risus</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-3">
+            <p class="font-weight-bold text-center my-2">Titre de la liste</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Cras justo odio</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Dapibus ac facilisis in</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                    <a href="https://google.com" target="_blank">Morbi leo risus</a>
+                    <span><a href="#"><i class="fas fa-arrow-up"></i></a> 
+                        <a href="#"><i class="fas fa-arrow-down"></i></a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
 {% endblock %}
