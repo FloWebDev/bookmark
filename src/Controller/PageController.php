@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/page')]
 class PageController extends AbstractController
@@ -25,14 +26,18 @@ class PageController extends AbstractController
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $page = new Page();
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $page->setUser($this->getUser());
             $entityManager->persist($page);
             $entityManager->flush();
+            $this->refreshOrder();
 
             return $this->redirectToRoute('page_index');
         }
@@ -43,7 +48,8 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'page_show', methods: ['GET'])]
+    #[Route('/user/{user_id}/page/{z}', name: 'page_show', methods: ['GET'])]
+    #[ParamConverter('page', options: ['mapping' => ['user_id'=> 'user_id', 'z'=> 'z']])]
     public function show(Page $page): Response
     {
         return $this->render('page/show.html.twig', [
@@ -52,13 +58,32 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Page $page): Response
+    public function edit(Request $request, Page $page, PageRepository $pageRepository): Response
     {
-        $form = $this->createForm(PageType::class, $page);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->getUser()->getId() !== $page->getUser()->getId()) {
+            $this->addFlash(
+                'danger',
+                'Unauthorized'
+            );
+            return $this->redirectToRoute('page_index');
+        }
+
+        $currentZ          = $page->getZ();
+        $currentUserId     = $page->getUser()->getId();
+        $form              = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $newZ = $form->getData()->getZ();
+            if ($currentZ > $newZ) {
+                $pageRepository->refreshOrderZ($currentUserId, $newZ, 'UP');
+            } elseif ($currentZ < $newZ) {
+                $pageRepository->refreshOrderZ($currentUserId, $newZ, 'DOWN');
+            }
+            
             $this->getDoctrine()->getManager()->flush();
+            $this->refreshOrder();
 
             return $this->redirectToRoute('page_index');
         }
@@ -92,5 +117,19 @@ class PageController extends AbstractController
         );
 
         return $this->redirectToRoute('page_index');
+    }
+
+    /**
+     * Permet de réordonner proprement l'ensemble des pages en fonction de leur position z
+     */
+    private function refreshOrder()
+    {
+        $pages = $this->getDoctrine()->getRepository(Page::class)->findByUser($this->getUser());
+
+        foreach ($pages as $order => $page) {
+            $page->setZ($order + 1);
+        }
+
+        $this->getDoctrine()->getManager()->flush();
     }
 }

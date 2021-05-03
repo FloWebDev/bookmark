@@ -3,12 +3,14 @@
 {% block title %}Liste des pages{% endblock %}
 
 {% block body %}
-    <h1>Liste des pages</h1>
+    <h1>Liste des pages 
+    <a href="{{ path('page_new') }}" type="button" class="btn btn-success"><i class="fas fa-plus-square"></i></a></h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Titre</th>
+                <th>Ordre (à supprimer)</th>
                 <th><i class="fas fa-tools"></i></th>
             </tr>
         </thead>
@@ -16,10 +18,10 @@
         {% for page in pages %}
             <tr>
                 <td>{{ page.title }}</td>
+                <td>{{ page.z }}</td>
                 <td>
-                    <a href="{{ path('page_show', {'id': page.id}) }}">show</a>
-                    <a href="{{ path('page_edit', {'id': page.id}) }}">edit</a>
-                    {% include 'page/_delete_modal.html.twig' %}
+                    <a href="{{ path('page_show', {'user_id': page.user.id, 'z': page.z}) }}"><i class="far fa-eye"></i></a>
+                    <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -29,6 +31,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('page_new') }}" type="button" class="btn btn-danger"><i class="fas fa-plus-square"></i></a>
 {% endblock %}

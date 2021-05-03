@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Page{% endblock %}
+{% block title %}Création Page{% endblock %}
 
 {% block body %}
-    <h1>Create new Page</h1>
+    <h1 class="col-12">Création Page</h1>
 
     {{ include('page/_form.html.twig') }}
 
-    <a href="{{ path('page_index') }}">back to list</a>
+    <p class="col-12 text-center">
+        <a href="{{ path('page_index') }}" class="d-block col-12 my-3">Retour à la liste</a>
+    </p>
 {% endblock %}

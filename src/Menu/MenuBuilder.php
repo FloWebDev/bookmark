@@ -32,7 +32,8 @@ class MenuBuilder
         if ($pages) {
             foreach ($pages as $page) {
                 $menu->addChild($page->getTitle(), ['route' => 'page_show', 'routeParameters' => [
-                    'id' => $page->getId()
+                    'user_id' => $page->getUser()->getId(),
+                    'z'       => $page->getZ()
                 ]]);
             }
         }

@@ -34,6 +34,27 @@ class PageRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+    * @return Page[] Returns an array of Page objects
+    */
+    public function refreshOrderZ(int $userId, int $z, string $direction)
+    {
+        if ($direction === 'UP') {
+            // UP
+            $sql  = "UPDATE App\Entity\Page p SET p.z = 
+        (case when p.z < $z then (p.z - 1) else (p.z + 1) end)
+        WHERE p.user = $userId";
+        } else {
+            // DOWN
+            $sql  = "UPDATE App\Entity\Page p SET p.z = 
+        (case when p.z <= $z then (p.z - 1) else (p.z + 1) end)
+        WHERE p.user = $userId";
+        }
+
+        $stmt = $this->getEntityManager()->createQuery($sql);
+        return $stmt->execute([]);
+    }
+
     // /**
     //  * @return Page[] Returns an array of Page objects
     //  */
