@@ -9,7 +9,7 @@
     width: 350px;
     height: 350px;
     border: 15px solid;
-    border-color: #E6AF2E #1B998B;
+    border-color: #343a40 #428bca;
     border-radius: 50%;
     animation: spin 1.5s infinite linear;
 }

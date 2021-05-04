@@ -62,7 +62,7 @@ class AppFixtures extends Fixture
         }
 
         // Création des items
-        for ($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             shuffle($lists);
             $item = new Item();
             $item->setTitle('Item n° ' . $i + 1);
@@ -97,7 +97,7 @@ class AppFixtures extends Fixture
         }
 
         // Création des items
-        for ($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             shuffle($lists);
             $item = new Item();
             $item->setTitle('Item n° ' . $i + 1);

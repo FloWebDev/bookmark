@@ -1,4 +1,5 @@
 #listContainer {
+    height: 80vh;
     overflow: auto;
 }
 
@@ -15,4 +16,12 @@
 .list-group .list-group-item {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+}
+
+.listing {
+    min-width: 200px;
+}
+
+.h5container {
+    overflow: hidden;
 }
