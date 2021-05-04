@@ -52,7 +52,7 @@ class PageController extends AbstractController
     /**
      * @ParamConverter("page", options={"mapping": {"user_id": "user", "z": "z"}})
      */
-    public function show(Page $page): Response
+    public function show(Page $page, Request $request): Response
     {
         if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
             $this->addFlash(
@@ -61,6 +61,12 @@ class PageController extends AbstractController
             );
             return $this->redirectToRoute('page_index');
         }
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('page/_list_show.html.twig', [
+                'page' => $page,
+            ]);
+        }
+
         return $this->render('page/show.html.twig', [
             'page' => $page,
         ]);

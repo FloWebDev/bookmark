@@ -5,3 +5,14 @@
 #listContainer ul li a {
     color: rgb(44, 42, 70);
 }
+
+.list-header {
+    background-color: #428bca;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.list-group .list-group-item {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
