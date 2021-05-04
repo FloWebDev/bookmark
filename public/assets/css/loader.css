@@ -1,19 +1,17 @@
-#loader {
+#loaderContainer {
     display: grid;
     place-items: center;
-    background-color: #0C1821;
-    color: #FFFFF2;
     height: 100vh;
     opacity: 0.5;
 }
 
 .loader-circle {
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
     border: 15px solid;
     border-color: #E6AF2E #1B998B;
     border-radius: 50%;
-    animation: spin 1.5s infinite;
+    animation: spin 1.5s infinite linear;
 }
 
 @keyframes spin {

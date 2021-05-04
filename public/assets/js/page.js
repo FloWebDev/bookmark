@@ -3,25 +3,31 @@ const page = {
         page.getLists();
     },
     getLists: () => {
+        page.displayLoader(true);
         const xhr = new XMLHttpRequest();
         xhr.open('GET', window.location.href, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.responseType = 'html'; // to avoid JSON.parse(xhr.response)
+        xhr.responseType = 'text';
         xhr.onreadystatechange = () => {
-            console.log(xhr.response)
             if (xhr.readyState === 4) {
+                page.displayLoader(false);
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    const res = xhr.response;
-                    console.log('RES', xhr);
-                    document.querySelector('#listContainer').innerHTML = res;
+                    document.querySelector('#listContainer').innerHTML = xhr.response;
                 } else {
                     console.error('Erreur')
                 }
             }
         };
-        setTimeout(() => {
-        xhr.send(); 
-        }, 5000);
+        xhr.send();
+    },
+    displayLoader(bool) {
+        if (bool) {
+            document.querySelector('#loaderContainer').style.display = 'block';
+            document.querySelector('#listContainer').style = 'none';
+        } else {
+            document.querySelector('#loaderContainer').style.display = 'none';
+            document.querySelector('#listContainer').style = 'block';
+        }
     }
 };
 document.addEventListener('DOMContentLoaded', page.init);
