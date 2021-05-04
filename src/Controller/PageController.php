@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Form\PageType;
 use App\Repository\PageRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/page')]
@@ -49,9 +49,18 @@ class PageController extends AbstractController
     }
 
     #[Route('/user/{user_id}/page/{z}', name: 'page_show', methods: ['GET'])]
-    #[ParamConverter('page', options: ['mapping' => ['user_id'=> 'user_id', 'z'=> 'z']])]
+    /**
+     * @ParamConverter("page", options={"mapping": {"user_id": "user", "z": "z"}})
+     */
     public function show(Page $page): Response
     {
+        if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
+            $this->addFlash(
+                'danger',
+                'Unauthorized'
+            );
+            return $this->redirectToRoute('page_index');
+        }
         return $this->render('page/show.html.twig', [
             'page' => $page,
         ]);
