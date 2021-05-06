@@ -3,35 +3,16 @@
 {% block title %}{{ page.title }}{% endblock %}
 
 {% block body %}
-    <h1 class="col-12">{{ page.title }}</h1>
+    <section class="col-12 m-0 p-0" data-page-id="{{ page.id }}">
+        <h1 class="col-12">{% include('listing/_form_modal.html.twig') %} {{ page.title }}</h1>
 
-    {#<table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ page.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ page.title }}</td>
-            </tr>
-            <tr>
-                <th>Z</th>
-                <td>{{ page.z }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ page.createdAt ? page.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>#}
+        <div class="col-12 mx-auto" id="loaderContainer">
+                <div class="loader-circle mx-auto mt-5"></div>
+        </div>
+        <div class="row col-12 flex-nowrap" id="listContainer">
 
-    <div class="col-12 mx-auto" id="loaderContainer">
-            <div class="loader-circle mx-auto mt-5"></div>
-    </div>
-    <div class="row col-12 flex-nowrap" id="listContainer">
-
-    </div>
+        </div>
+    </section>
 
 
 {% endblock %}

@@ -41,6 +41,7 @@ class Page
 
     /**
      * @ORM\OneToMany(targetEntity=Listing::class, mappedBy="page")
+     * @ORM\OrderBy({"z" = "ASC"})
      */
     private $listings;
 
@@ -48,6 +49,11 @@ class Page
     {
         $this->created_at = new \DateTime();
         $this->listings   = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->z . ' - ' . $this->title;
     }
 
     public function getId(): ?int
