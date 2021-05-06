@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Form\PageType;
 use App\Repository\PageRepository;
+use App\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,12 +20,12 @@ class PageController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('page/index.html.twig', [
-            'pages' => $pageRepository->findByUser($this->getUser()),
+            'pages' => $this->getUser()->getPages()
         ]);
     }
 
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, PageRepository $pageRepository, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -35,9 +36,10 @@ class PageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $page->setUser($this->getUser());
+            $page->setZ($page->getZ() - 1); // -1 pour positionner au-dessus de l'élément existant d'un cran
             $entityManager->persist($page);
             $entityManager->flush();
-            $this->refreshOrder();
+            $orderService->refreshOrder($pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']));
 
             return $this->redirectToRoute('page_index');
         }
@@ -73,7 +75,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Page $page, PageRepository $pageRepository): Response
+    public function edit(Request $request, Page $page, PageRepository $pageRepository, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
@@ -84,22 +86,13 @@ class PageController extends AbstractController
             return $this->redirectToRoute('page_index');
         }
 
-        $currentZ          = $page->getZ();
-        $currentUserId     = $page->getUser()->getId();
-        $form              = $this->createForm(PageType::class, $page);
+        $currentZ           = $page->getZ();
+        $form               = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newZ = $form->getData()->getZ();
-            if ($currentZ > $newZ) {
-                $pageRepository->refreshOrderZ($currentUserId, $newZ, 'UP');
-            } elseif ($currentZ < $newZ) {
-                $pageRepository->refreshOrderZ($currentUserId, $newZ, 'DOWN');
-            }
-            
-            $this->getDoctrine()->getManager()->flush();
-            $this->refreshOrder();
-
+            $orderService->handleOrderZ($page, $pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']), $currentZ);
+            $orderService->refreshOrder($pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']));
             return $this->redirectToRoute('page_index');
         }
 
@@ -132,19 +125,5 @@ class PageController extends AbstractController
         );
 
         return $this->redirectToRoute('page_index');
-    }
-
-    /**
-     * Permet de réordonner proprement l'ensemble des pages en fonction de leur position z
-     */
-    private function refreshOrder()
-    {
-        $pages = $this->getDoctrine()->getRepository(Page::class)->findByUser($this->getUser());
-
-        foreach ($pages as $order => $page) {
-            $page->setZ($order + 1);
-        }
-
-        $this->getDoctrine()->getManager()->flush();
     }
 }

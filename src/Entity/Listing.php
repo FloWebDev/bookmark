@@ -41,6 +41,7 @@ class Listing
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="listing")
+     * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
      */
     private $items;
 

@@ -41,7 +41,7 @@ class Page
 
     /**
      * @ORM\OneToMany(targetEntity=Listing::class, mappedBy="page")
-     * @ORM\OrderBy({"z" = "ASC"})
+     * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
      */
     private $listings;
 

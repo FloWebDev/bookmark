@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
 
         // Création des pages
         $pages = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $page = new Page();
             $page->setTitle('Page n° ' . $i + 1);
             $page->setZ($i + 1);
@@ -75,7 +75,7 @@ class AppFixtures extends Fixture
         // POUR USER
         // Création d'un utilisateur
         $pages = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $page = new Page();
             $page->setTitle('Page n° ' . $i + 1);
             $page->setZ($i + 1);
