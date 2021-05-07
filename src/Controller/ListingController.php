@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Listing;
 use App\Form\ListingType;
+use App\Service\OrderService;
 use App\Repository\ListingRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/listing')]
 class ListingController extends AbstractController
@@ -22,9 +23,15 @@ class ListingController extends AbstractController
     }
 
     #[Route('/new', name: 'listing_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
+            if (!$this->getUser()) {
+                return $this->json([
+                    'success'   => false,
+                    'msg'       => 'Unauthorized'
+                ], 403);
+            }
             $listing = new Listing();
             $form    = $this->createForm(ListingType::class, $listing, [
                 'attr' => [
@@ -36,8 +43,10 @@ class ListingController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
+                $listing->setZ($listing->getZ() - 1); // -1 pour positionner au-dessus de l'élément existant d'un cran
                 $entityManager->persist($listing);
                 $entityManager->flush();
+                $orderService->refreshOrder($listing->getPage()->getListings());
 
                 return $this->json([
                     'success' => true
@@ -45,8 +54,9 @@ class ListingController extends AbstractController
             }
 
             return $this->json([
-                'success' => false,
-                'form'    => $this->renderView('listing/_form.html.twig', [
+                'success'   => null,
+                'formTitle' => 'Nouvelle liste',
+                'form'      => $this->renderView('listing/_form.html.twig', [
                     'listing' => $listing,
                     'form'    => $form->createView(),
                 ])
@@ -63,32 +73,81 @@ class ListingController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'listing_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Listing $listing): Response
+    public function edit(Request $request, Listing $listing, OrderService $orderService): Response
     {
-        $form = $this->createForm(ListingType::class, $listing);
-        $form->handleRequest($request);
+        if ($request->isXmlHttpRequest()) {
+            if ($this->getUser()->getId() !== $listing->getUser()->getId()) {
+                return $this->json([
+                    'success'   => false,
+                    'msg'       => 'Unauthorized'
+                ], 403);
+            }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $currentZ           = $listing->getZ();
+            $form               = $this->createForm(ListingType::class, $listing);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('listing_index');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $orderService->handleOrderZ($listing, $listing->getPage()->getListings(), $currentZ);
+                // Refresh and re-order
+                $this->getDoctrine()->getManager()->refresh($listing->getPage());
+                $orderService->refreshOrder($listing->getPage()->getListings());
+
+                //$this->getDoctrine()->getManager()->flush();
+                // return $this->redirectToRoute('listing_index');
+
+                return $this->json([
+                    'success' => true
+                ], 201);
+            }
+
+            // return $this->render('listing/edit.html.twig', [
+            //     'listing' => $listing,
+            //     'form'    => $form->createView(),
+            // ]);
+
+            return $this->json([
+                'success'   => null,
+                'formTitle' => 'Modification liste "' . $listing->getTitle() . '"',
+                'form'      => $this->renderView('listing/_form.html.twig', [
+                    'listing' => $listing,
+                    'form'    => $form->createView(),
+                ])
+            ]);
         }
-
-        return $this->render('listing/edit.html.twig', [
-            'listing' => $listing,
-            'form'    => $form->createView(),
-        ]);
     }
 
-    #[Route('/{id}', name: 'listing_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'listing_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Listing $listing): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$listing->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($listing);
-            $entityManager->flush();
-        }
+        if ($request->isXmlHttpRequest()) {
+            if ($request->isMethod('GET')) {
+                return $this->json([
+                    'success'   => null,
+                    'formTitle' => 'Suppression de la liste "' . $listing->getTitle() . '"',
+                    'form'      => $this->renderView('listing/_delete_modal_form.html.twig', [
+                        'listing' => $listing
+                    ])
+                ]);
+            } elseif ($request->isMethod('POST')) {
+                if (!$this->getUser() || ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()
+            && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+                    return $this->json([
+                        'success' => false,
+                        'msg'     => 'Unauthorized'
+                    ], 403);
+                }
 
-        return $this->redirectToRoute('listing_index');
+                if ($this->isCsrfTokenValid('delete'.$listing->getId(), $request->request->get('_token'))) {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->remove($listing);
+                    $entityManager->flush();
+                }
+
+                return $this->json([
+                    'success'   => true
+                ]);
+            }
+        }
     }
 }

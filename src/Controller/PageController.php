@@ -25,7 +25,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PageRepository $pageRepository, OrderService $orderService): Response
+    public function new(Request $request, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 

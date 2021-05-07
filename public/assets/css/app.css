@@ -1,5 +1,6 @@
 a {
     color: black;
+    cursor: pointer;
 }
 
 body {
@@ -15,8 +16,4 @@ table.table {
 form {
     padding: 1.5rem;
     background-color: #FFFFFF;
-}
-
-a[data-target="#deleteModal"] {
-    cursor: pointer;
 }

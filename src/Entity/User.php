@@ -48,7 +48,7 @@ class User implements UserInterface
     private $created_at;
 
     /**
-     * @ORM\OneToMany(targetEntity=Page::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Page::class, mappedBy="user", orphanRemoval=true)
      * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
      */
     private $pages;

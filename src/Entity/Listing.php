@@ -40,7 +40,7 @@ class Listing
     private $page;
 
     /**
-     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="listing")
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="listing", orphanRemoval=true)
      * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
      */
     private $items;
