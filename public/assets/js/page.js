@@ -9,11 +9,11 @@ const page = {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', window.location.href, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.responseType = 'text';
+        xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    document.querySelector('#listContainer').innerHTML = xhr.response;
+                    document.querySelector('#listContainer').innerHTML = xhr.response.form;
                 } else {
                     console.error('Erreur')
                 }

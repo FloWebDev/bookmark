@@ -39,7 +39,7 @@ class PageController extends AbstractController
             $page->setZ($page->getZ() - 1); // -1 pour positionner au-dessus de l'élément existant d'un cran
             $entityManager->persist($page);
             $entityManager->flush();
-            $orderService->refreshOrder($pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']));
+            $orderService->refreshOrder($this->getUser()->getPages());
 
             return $this->redirectToRoute('page_index');
         }
@@ -64,8 +64,12 @@ class PageController extends AbstractController
             return $this->redirectToRoute('page_index');
         }
         if ($request->isXmlHttpRequest()) {
-            return $this->render('page/_list_show.html.twig', [
-                'page' => $page,
+            return $this->json([
+                'success' => true,
+                'msg' => 'Tout le contenu de votre page',
+                'form'    => $this->renderView('page/_list_show.html.twig', [
+                    'page' => $page
+                ])
             ]);
         }
 
@@ -75,7 +79,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Page $page, PageRepository $pageRepository, OrderService $orderService): Response
+    public function edit(Request $request, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
@@ -91,8 +95,16 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $orderService->handleOrderZ($page, $pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']), $currentZ);
-            $orderService->refreshOrder($pageRepository->findBy(['user' => $this->getUser()], ['z' => 'ASC', 'created_at' => 'ASC']));
+            $orderService->handleOrderZ($page, $this->getUser()->getPages(), $currentZ);
+            // Refresh and re-order
+            $this->getDoctrine()->getManager()->refresh($this->getUser());
+            $orderService->refreshOrder($this->getUser()->getPages());
+
+            $this->addFlash(
+                'success',
+                'Action réalisée avec succès'
+            );
+
             return $this->redirectToRoute('page_index');
         }
 

@@ -3,19 +3,21 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class OrderService
 {
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, Security $security)
     {
-        $this->em = $em;
+        $this->em       = $em;
     }
 
     public function handleOrderZ($targetEntity, $entities, int $previousOlder)
     {
-        if (!method_exists($targetEntity::class, 'getZ') || !method_exists($targetEntity::class, 'setZ')) {
+        if (!method_exists($targetEntity::class, 'getZ') || !method_exists($targetEntity::class, 'setZ')
+        || !method_exists($entities[0]::class, 'getZ') || !method_exists($entities[0]::class, 'setZ')) {
             throw new \Exception('Erreur sur handleOrderZ');
         }
         $newZ = $targetEntity->getZ();

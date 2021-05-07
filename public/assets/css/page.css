@@ -20,6 +20,7 @@
 
 .listing {
     min-width: 200px;
+    max-width: 300px;
 }
 
 .h5container {
