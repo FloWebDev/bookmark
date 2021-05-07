@@ -7,8 +7,4 @@
 
     {{ include('page/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <p class="col-12 text-center">
-        <a href="{{ path('page_index') }}" class="d-block col-12 my-3">Retour à la liste</a>
-        {% include 'page/_delete_modal.html.twig' %}
-    </p>
 {% endblock %}

@@ -22,6 +22,7 @@
                 <td>
                     <a href="{{ path('page_show', {'user_id': page.user.id, 'z': page.z}) }}"><i class="far fa-eye"></i></a>
                     <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i></a>
+                    {% include 'page/_delete_modal.html.twig' %}
                 </td>
             </tr>
         {% else %}

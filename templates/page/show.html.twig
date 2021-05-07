@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/css/page.css') }}">
+{% endblock %}
 {% block title %}{{ page.title }}{% endblock %}
 
 {% block body %}

@@ -1,0 +1,22 @@
+a {
+    color: black;
+}
+
+body {
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+}
+
+table.table {
+    background-color: #FFFFFF;
+}
+
+form {
+    padding: 1.5rem;
+    background-color: #FFFFFF;
+}
+
+a[data-target="#deleteModal"] {
+    cursor: pointer;
+}

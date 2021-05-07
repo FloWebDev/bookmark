@@ -125,6 +125,7 @@ class PageController extends AbstractController
             );
             return $this->redirectToRoute('page_index');
         }
+
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);

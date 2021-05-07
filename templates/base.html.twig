@@ -9,13 +9,19 @@
     <link rel="stylesheet" href="{{ asset('lib/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
     {% if app.user %}
+        <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/page.css') }}">
+        <style>
+            body {
+                background-image: url("{{ asset('assets/wallpapers/pacman.jpg') }}");
+            }
+        </style>
     {% endif %}
-    <title>BookMark</title>
-        {% block stylesheets %}
+    {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+    {% endblock %}
+    <title>{% block title %}BookMark{% endblock %}</title>
+
 
 
     </head>
@@ -38,7 +44,7 @@
                     {% endfor %}
                 {% endfor %}
             </div>
-            <div class="row col-12">
+            <div class="row col-12 m-0 p-0">
                 {# Content #}
                 {% block body %}{% endblock %}
             </div>
@@ -55,4 +61,20 @@
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
 </html>
