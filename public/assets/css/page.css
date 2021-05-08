@@ -27,9 +27,15 @@
     border-top-right-radius: 0px;
 }
 
+.list-group .list-group-item div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .listing {
     min-width: 200px;
-    max-width: 300px;
+    max-width: 350px;
 }
 
 .h5container {

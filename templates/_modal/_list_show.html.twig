@@ -23,7 +23,7 @@
             </div>
             {# Direction #}
             <div class="col-6 text-right">
-                <a title="{{ Constant.ITEM_CREATE_LABEL }}"><i class="fas fa-plus-circle"></i></a>
+                <a class="h5" title="{{ Constant.ITEM_CREATE_LABEL }}"><i class="fas fa-plus-circle"></i></a>
                 <a data-list-id="{{ list.id }}" data-direction="up"><i class="fas fa-arrow-left"></i></a>
                 <a data-list-id="{{ list.id }}" data-direction="down"><i class="fas fa-arrow-right"></i></a>
             </div>
@@ -34,7 +34,7 @@
         {% for item in list.items %}
         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
             <div class="col-9">
-                <a href="{{ item.url }}" target="_blank">{{ item.title }}</a>
+                <a href="{{ item.url }}" target="_blank" title="{{ item.title }}">{{ item.title }}</a>
             </div>
             
             <div class="col-3 p-0 d-flex justify-content-around">

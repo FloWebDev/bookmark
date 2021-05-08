@@ -65,7 +65,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 500; $i++) {
             shuffle($lists);
             $item = new Item();
-            $item->setTitle('Item n° ' . $i + 1);
+            $item->setTitle($i + 1 . ' - How can I do that I want to do thanks to Stack Overflow??!');
             $item->setUrl('https://www.google.com/');
             $item->setZ($i + 1);
             $item->setListing($lists[0]);
