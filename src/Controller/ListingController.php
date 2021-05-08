@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Listing;
 use App\Form\ListingType;
+use App\Constant\Constant;
 use App\Service\OrderService;
 use App\Repository\ListingRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,7 @@ class ListingController extends AbstractController
             if (!$this->getUser()) {
                 return $this->json([
                     'success'   => false,
-                    'msg'       => 'Unauthorized'
+                    'msg'       => Constant::FORBIDDEN
                 ], 403);
             }
             $listing = new Listing();
@@ -55,7 +56,7 @@ class ListingController extends AbstractController
 
             return $this->json([
                 'success'   => null,
-                'formTitle' => 'Nouvelle liste',
+                'formTitle' => Constant::LIST_CREATE_FORM_TITLE,
                 'form'      => $this->renderView('listing/_form.html.twig', [
                     'listing' => $listing,
                     'form'    => $form->createView(),
@@ -79,7 +80,7 @@ class ListingController extends AbstractController
             if ($this->getUser()->getId() !== $listing->getUser()->getId()) {
                 return $this->json([
                     'success'   => false,
-                    'msg'       => 'Unauthorized'
+                    'msg'       => Constant::FORBIDDEN
                 ], 403);
             }
 
@@ -108,7 +109,7 @@ class ListingController extends AbstractController
 
             return $this->json([
                 'success'   => null,
-                'formTitle' => 'Modification liste "' . $listing->getTitle() . '"',
+                'formTitle' => Constant::LIST_UPDATE_FORM_TITLE . ' ' . $listing->getTitle(),
                 'form'      => $this->renderView('listing/_form.html.twig', [
                     'listing' => $listing,
                     'form'    => $form->createView(),
@@ -124,7 +125,7 @@ class ListingController extends AbstractController
             if ($request->isMethod('GET')) {
                 return $this->json([
                     'success'   => null,
-                    'formTitle' => 'Suppression de la liste "' . $listing->getTitle() . '"',
+                    'formTitle' => Constant::LIST_DELETE_FORM_TITLE . ' ' . $listing->getTitle(),
                     'form'      => $this->renderView('listing/_delete_modal_form.html.twig', [
                         'listing' => $listing
                     ])
@@ -134,7 +135,7 @@ class ListingController extends AbstractController
             && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
                     return $this->json([
                         'success' => false,
-                        'msg'     => 'Unauthorized'
+                        'msg'     => Constant::FORBIDDEN
                     ], 403);
                 }
 

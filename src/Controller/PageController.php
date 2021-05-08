@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Form\PageType;
-use App\Repository\PageRepository;
+use App\Constant\Constant;
 use App\Service\OrderService;
+use App\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,6 +21,7 @@ class PageController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('page/index.html.twig', [
+            'pageTitle' => Constant::PAGES_LIST_INDEX,
             'pages' => $this->getUser()->getPages()
         ]);
     }
@@ -59,14 +61,14 @@ class PageController extends AbstractController
         if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
             $this->addFlash(
                 'danger',
-                'Unauthorized'
+                Constant::FORBIDDEN
             );
             return $this->redirectToRoute('page_index');
         }
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
-                'msg' => 'Tout le contenu de votre page',
+                'msg' => Constant::DASHBOARD_SENTENCE,
                 'form'    => $this->renderView('page/_list_show.html.twig', [
                     'page' => $page
                 ])
@@ -85,7 +87,7 @@ class PageController extends AbstractController
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             $this->addFlash(
                 'danger',
-                'Unauthorized'
+                Constant::FORBIDDEN
             );
             return $this->redirectToRoute('page_index');
         }
@@ -102,7 +104,7 @@ class PageController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Action réalisée avec succès'
+                Constant::SUCCESS_ACTION
             );
 
             return $this->redirectToRoute('page_index');
@@ -121,7 +123,7 @@ class PageController extends AbstractController
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             $this->addFlash(
                 'danger',
-                'Unauthorized'
+                Constant::FORBIDDEN
             );
             return $this->redirectToRoute('page_index');
         }
@@ -134,7 +136,7 @@ class PageController extends AbstractController
 
         $this->addFlash(
             'success',
-            'Action réalisée avec succès'
+            Constant::SUCCESS_ACTION
         );
 
         return $this->redirectToRoute('page_index');
