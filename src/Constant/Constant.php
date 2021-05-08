@@ -22,4 +22,12 @@ class Constant
     const LIST_DELETE_ALERT = '<b>Attention : </b><br>La suppression d\'une liste entraîne la suppression de tous les items associés.';
 
     const PAGE_UPDATE_TITLE = 'Modification Page';
+
+    const DROPDOWN_ITEM_CREATE_LABEL = 'Ajouter lien';
+    const DROPDOWN_LIST_CREATE_LABEL = 'Créer liste';
+    const DROPDOWN_LIST_UPDATE_LABEL = 'Éditer liste';
+    const DROPDOWN_LIST_DELETE_LABEL = 'Supprimer liste';
+
+    const LIST_CREATE_LABEL = 'Créer une liste';
+    const ITEM_CREATE_LABEL = 'Créer un favori';
 }

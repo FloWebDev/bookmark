@@ -13,6 +13,15 @@
     border-top-right-radius: 5px;
 }
 
+.menu-header {
+    background-color: #428bca;
+    /* border: 1px solid black; */
+}
+
+.menu-header .dropdown-toggle {
+    padding: 0.2rem;
+}
+
 .list-group .list-group-item {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
