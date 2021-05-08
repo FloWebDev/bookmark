@@ -14,8 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <b>Attention : </b><br>
-        La suppression d'une page entraîne la suppression de toutes les listes et de tous les items associés.
+        {{ Constant.PAGE_DELETE_ALERT|raw }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

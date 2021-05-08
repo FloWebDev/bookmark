@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <li><a class="dropdown-item">Ajouter lien</a></li>
                     <li><a class="dropdown-item" data-toggle="modal" data-target="#listingModal">Créer liste</a></li>
-                    <li><a class="dropdown-item">Éditer liste</a></li>
+                    <li><a class="dropdown-item" data-toggle="modal" data-target="#listingModal" data-list-id="{{ list.id }}">Éditer liste</a></li>
                     <li><a class="dropdown-item" data-toggle="modal" data-target="#deleteListingModal" data-list-id="{{ list.id }}">Supprimer liste</a></li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
             </div>
             
             <div class="col-3 p-0 d-flex justify-content-around">
-                <a href="#"><i class="fas fa-tools"></i></i></a>
+                <a href="#"><i class="fas fa-pen"></i></i></a>
                 <a href="#"><i class="fas fa-arrow-up"></i></a> 
                 <a href="#"><i class="fas fa-arrow-down"></i></a>
             </div>
@@ -41,11 +41,11 @@
         </li>
         {% else %}
         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
-            Aucun élément trouvé
+            {{ Constant.NO_RECORDS_FOUND }}
         </li>
         {% endfor %}
     </ul>
 </div>
 {% else %}
-    <p>Aucun élément trouvé</p>
+    {{ Constant.NO_RECORDS_FOUND }}
 {% endfor %}

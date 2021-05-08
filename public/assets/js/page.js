@@ -30,7 +30,7 @@ const page = {
             document.querySelector('#listContainer').style = 'block';
         }
     },
-    displayListForm: () => {
+    displayCreateListForm: () => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/listing/new', true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -42,13 +42,13 @@ const page = {
                     document.querySelector('#listingFormModalLabel').textContent = xhr.response.formTitle;
                     document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
                 } else {
-                    console.error('Erreur displayListForm')
+                    console.error('Erreur displayCreateListForm')
                 }
             }
         };
         xhr.send();
     },
-    handleNewListForm: e => {
+    handleListForm: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
         const data = new FormData(e.target);
@@ -66,11 +66,29 @@ const page = {
                         document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
                     }
                 } else {
-                    console.error('Erreur handleNewListForm');
+                    console.error('Erreur handleListForm');
                 }
             }
         };
         xhr.send(data);
+    },
+    displayUpdateListForm: e => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-list-id') + '/edit', true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                page.displayLoader(false);
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    document.querySelector('#listingFormModalLabel').textContent = xhr.response.formTitle;
+                    document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
+                } else {
+                    console.error('Erreur displayUpdateListForm')
+                }
+            }
+        };
+        xhr.send();
     },
     displayDeleteListForm: e => {
         const xhr = new XMLHttpRequest();
@@ -105,7 +123,7 @@ const page = {
                         console.error('Erreur handleDeleteListForm');
                     }
                 } else {
-                    console.error('Erreur handleNewListForm');
+                    console.error('Erreur handleDeleteListForm');
                 }
             }
         };
@@ -127,10 +145,17 @@ const page = {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
                     if (document.querySelector('[data-target="#listingModal"]')) {
-                        document.querySelector('[data-target="#listingModal"]').addEventListener('click', page.displayListForm);
+                        document.querySelectorAll('[data-target="#listingModal"]').forEach(elt => {
+                            if (!elt.getAttribute('data-list-id')) {
+                                elt.addEventListener('click', page.displayCreateListForm);
+                            } else {
+                                elt.addEventListener('click', page.displayUpdateListForm);
+                            }
+                        });
+
                     }
                     if (document.querySelector('#listingFormContent')) {
-                        document.querySelector('#listingFormContent').addEventListener('submit', page.handleNewListForm)
+                        document.querySelector('#listingFormContent').addEventListener('submit', page.handleListForm)
                     }
                     if (document.querySelector('#listing_page')) {
                         document.querySelector('#listing_page').value = document.querySelector('section[data-page-id]').getAttribute('data-page-id');

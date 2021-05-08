@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
 
 {% block body %}
-    <h1 class="text-light">{{ pageTitle }} 
+    <h1 class="text-light">{{ Constant.PAGES_LIST_INDEX }} 
     <a href="{{ path('page_new') }}" type="button" class="btn btn-dark p-0 px-1"><i class="fas fa-plus-square"></i></a></h1>
 
     <table class="table">
@@ -21,13 +21,13 @@
                 <td>{{ page.z }}</td>
                 <td>
                     <a href="{{ path('page_show', {'user_id': page.user.id, 'z': page.z}) }}"><i class="far fa-eye"></i></a>
-                    <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-pen"></i></a>
                     {% include 'page/_delete_modal.html.twig' %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">Aucun élément trouvé</td>
+                <td colspan="5">{{ Constant.NO_RECORDS_FOUND }}</td>
             </tr>
         {% endfor %}
         </tbody>

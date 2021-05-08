@@ -36,8 +36,8 @@ class ListingController extends AbstractController
             $listing = new Listing();
             $form    = $this->createForm(ListingType::class, $listing, [
                 'attr' => [
-                    'id'     => 'newListForm',
-                    'action' => $this->generateUrl($request->attributes->get('_route'))
+                    'id'     => 'createListForm',
+                    'action' => $this->generateUrl('listing_new')
                 ]
             ]);
             $form->handleRequest($request);
@@ -77,7 +77,7 @@ class ListingController extends AbstractController
     public function edit(Request $request, Listing $listing, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
-            if ($this->getUser()->getId() !== $listing->getUser()->getId()) {
+            if ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()) {
                 return $this->json([
                     'success'   => false,
                     'msg'       => Constant::FORBIDDEN
@@ -85,7 +85,14 @@ class ListingController extends AbstractController
             }
 
             $currentZ           = $listing->getZ();
-            $form               = $this->createForm(ListingType::class, $listing);
+            $form               = $this->createForm(ListingType::class, $listing, [
+                'attr' => [
+                    'id'     => 'editListForm',
+                    'action' => $this->generateUrl('listing_edit', [
+                        'id' => $listing->getId()
+                    ])
+                ]
+            ]);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -94,22 +101,14 @@ class ListingController extends AbstractController
                 $this->getDoctrine()->getManager()->refresh($listing->getPage());
                 $orderService->refreshOrder($listing->getPage()->getListings());
 
-                //$this->getDoctrine()->getManager()->flush();
-                // return $this->redirectToRoute('listing_index');
-
                 return $this->json([
                     'success' => true
                 ], 201);
             }
 
-            // return $this->render('listing/edit.html.twig', [
-            //     'listing' => $listing,
-            //     'form'    => $form->createView(),
-            // ]);
-
             return $this->json([
                 'success'   => null,
-                'formTitle' => Constant::LIST_UPDATE_FORM_TITLE . ' ' . $listing->getTitle(),
+                'formTitle' => Constant::LIST_UPDATE_FORM_TITLE . $listing->getTitle(),
                 'form'      => $this->renderView('listing/_form.html.twig', [
                     'listing' => $listing,
                     'form'    => $form->createView(),
@@ -125,7 +124,7 @@ class ListingController extends AbstractController
             if ($request->isMethod('GET')) {
                 return $this->json([
                     'success'   => null,
-                    'formTitle' => Constant::LIST_DELETE_FORM_TITLE . ' ' . $listing->getTitle(),
+                    'formTitle' => Constant::LIST_DELETE_FORM_TITLE . $listing->getTitle(),
                     'form'      => $this->renderView('listing/_delete_modal_form.html.twig', [
                         'listing' => $listing
                     ])

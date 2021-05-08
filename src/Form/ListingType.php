@@ -46,7 +46,7 @@ class ListingType extends AbstractType
                     'min' => 1,
                     'max' => 100
                 ],
-                'data'        => 1,
+                'empty_data'        => 1,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Ce champ ne doit pas être vide'
