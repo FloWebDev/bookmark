@@ -1,6 +1,0 @@
-<!-- Delete Modal Content -->
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-<form method="post" id="deleteListingFormBtn" action="{{ path('listing_delete', {'id': listing.id}) }}">
-  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ listing.id) }}">
-  <button class="btn btn-danger">Confirmer la suppression</button>
-</form>

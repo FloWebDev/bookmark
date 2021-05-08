@@ -90,7 +90,8 @@ const page = {
         };
         xhr.send();
     },
-    displayDeleteListForm: e => {
+    // Méthode générique à plusieurs entités d'affichage du formulaire de suppression dans la modale
+    displayDeleteForm: e => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-list-id') + '/delete', true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -98,16 +99,18 @@ const page = {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    document.querySelector('#deleteListingModalLabel').textContent = xhr.response.formTitle;
-                    document.querySelector('#deleteListingModal div.modal-footer').innerHTML = xhr.response.form;
+                    document.querySelector('#deleteModalLabel').textContent = xhr.response.title;
+                    document.querySelector('#deleteModal div.modal-body').innerHTML = xhr.response.alert;
+                    document.querySelector('#deleteFormContainer').innerHTML = xhr.response.form;
                 } else {
-                    console.error('Erreur displayDeleteListForm')
+                    console.error('Erreur displayDeleteForm')
                 }
             }
         };
         xhr.send();
     },
-    handleDeleteListForm: e => {
+    // Méthode générique à plusieurs entités du traitement de la soummission du formulaire de suppression présent dans la modale
+    handleDeleteForm: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
         const data = new FormData(e.target);
@@ -120,10 +123,10 @@ const page = {
                     page.closeModal();
                     page.getLists();
                     if (!xhr.response.success) {
-                        console.error('Erreur handleDeleteListForm');
+                        console.error('Erreur handleDeleteForm');
                     }
                 } else {
-                    console.error('Erreur handleDeleteListForm');
+                    console.error('Erreur handleDeleteForm');
                 }
             }
         };
@@ -160,13 +163,13 @@ const page = {
                     if (document.querySelector('#listing_page')) {
                         document.querySelector('#listing_page').value = document.querySelector('section[data-page-id]').getAttribute('data-page-id');
                     }
-                    if (document.querySelector('[data-target="#deleteListingModal"]')) {
-                        document.querySelectorAll('[data-target="#deleteListingModal"]').forEach(elt => {
-                            elt.addEventListener('click', page.displayDeleteListForm);
+                    if (document.querySelector('[data-target="#deleteModal"]')) {
+                        document.querySelectorAll('[data-target="#deleteModal"]').forEach(elt => {
+                            elt.addEventListener('click', page.displayDeleteForm);
                         });
                     }
-                    if (document.querySelector('#deleteListingFormBtn')) {
-                        document.querySelector('#deleteListingFormBtn').addEventListener('submit', page.handleDeleteListForm);
+                    if (document.querySelector('#deleteModal form')) {
+                        document.querySelector('#deleteModal form').addEventListener('submit', page.handleDeleteForm);
                     }
                 }
             }

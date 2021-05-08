@@ -58,7 +58,9 @@ class PageController extends AbstractController
      */
     public function show(Page $page, Request $request): Response
     {
-        if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->getUser() || ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
             $this->addFlash(
                 'danger',
                 Constant::FORBIDDEN
@@ -69,7 +71,7 @@ class PageController extends AbstractController
             return $this->json([
                 'success' => true,
                 'msg' => Constant::DASHBOARD_SENTENCE,
-                'form'    => $this->renderView('page/_list_show.html.twig', [
+                'form'    => $this->renderView('_modal/_list_show.html.twig', [
                     'page' => $page
                 ])
             ]);

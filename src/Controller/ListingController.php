@@ -124,8 +124,10 @@ class ListingController extends AbstractController
             if ($request->isMethod('GET')) {
                 return $this->json([
                     'success'   => null,
-                    'formTitle' => Constant::LIST_DELETE_FORM_TITLE . $listing->getTitle(),
-                    'form'      => $this->renderView('listing/_delete_modal_form.html.twig', [
+                    'title'     => Constant::LIST_DELETE_MODAL_TITLE . $listing->getTitle(),
+                    'alert'     => Constant::LIST_DELETE_MODAL_ALERT,
+                    'form'      => $this->renderView('listing/_delete_form.html.twig', [
+
                         'listing' => $listing
                     ])
                 ]);
