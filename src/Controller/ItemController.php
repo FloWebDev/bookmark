@@ -111,7 +111,7 @@ class ItemController extends AbstractController
                 'success'   => null,
                 'formTitle' => Constant::ITEM_UPDATE_FORM_TITLE . $item->getTitle(),
                 'form'      => $this->renderView('item/_form.html.twig', [
-                    'item' => $item,
+                    'item'    => $item,
                     'form'    => $form->createView(),
                 ])
             ]);
@@ -134,11 +134,16 @@ class ItemController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($item);
                 $entityManager->flush();
+
+                return $this->json([
+                    'success'   => true
+                ]);
             }
 
             return $this->json([
-                'success'   => true
-            ]);
+                'success' => false,
+                'msg'     => Constant::FORBIDDEN
+            ], 403);
         }
     }
 }

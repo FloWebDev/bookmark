@@ -118,6 +118,30 @@ const page = {
         };
         xhr.send(data);
     },
+    // Méthode de suppression spécifique aux items
+    handleItemDeleteClick: e => {
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        const data = new FormData();
+        data.set('_token', e.currentTarget.getAttribute('data-csrf'))
+        xhr.open('POST', e.currentTarget.getAttribute('data-action'), true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    page.closeModal();
+                    page.getLists();
+                    if (!xhr.response.success) {
+                        console.error('Erreur handleItemDeleteClick');
+                    }
+                } else {
+                    console.error('Erreur handleItemDeleteClick');
+                }
+            }
+        };
+        xhr.send(data);
+    },
     domChangeListener: () => {
         // Selectionne le noeud dont les mutations seront observées
         const targetNode = document.querySelector('section');
@@ -145,6 +169,9 @@ const page = {
                     if (document.querySelector('#listing_page')) {
                         document.querySelector('#listing_page').value = document.querySelector('section[data-page-id]').getAttribute('data-page-id');
                     }
+                    if (document.querySelector('#item_listing')) {
+                        document.querySelector('#item_listing').value = page.currentListing;
+                    }
                     if (document.querySelector('[data-target="#deleteModal"]')) {
                         document.querySelectorAll('[data-target="#deleteModal"]').forEach(elt => {
                             elt.addEventListener('click', page.displayDeleteForm);
@@ -153,8 +180,10 @@ const page = {
                     if (document.querySelector('#deleteModal form')) {
                         document.querySelector('#deleteModal form').addEventListener('submit', page.handleDeleteForm);
                     }
-                    if (document.querySelector('#item_listing')) {
-                        document.querySelector('#item_listing').value = page.currentListing;
+                    if (document.querySelector('.itemDeleteBtn')) {
+                        document.querySelectorAll('.itemDeleteBtn').forEach(elt => {
+                            elt.addEventListener('click', page.handleItemDeleteClick);
+                        });
                     }
                 }
             }
