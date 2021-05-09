@@ -6,7 +6,6 @@
         <h5 class="mb-1 col-12 py-1 px-2">{{ list.title }}</h5>
     </div>
 
-
     {# Menu #}
     <div class="d-flex w-100 justify-content-between pt-0 pb-2 px-0 menu-header">
             {# Dropdown #}
@@ -15,9 +14,28 @@
                     <i class="fas fa-tools"></i>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#modal" data-action="{{ path('listing_new') }}">{{ Constant.DROPDOWN_LIST_CREATE_LABEL }}</a></li>
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#modal" data-elt-id="{{ list.id }}" data-action="{{ path('listing_edit', {id: list.id}) }}">{{ Constant.DROPDOWN_LIST_UPDATE_LABEL }}</a></li>
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#deleteModal" data-elt-id="{{ list.id }}">{{ Constant.DROPDOWN_LIST_DELETE_LABEL }}</a></li>
+                    <li>
+                        <a class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modal"
+                        data-action="{{ path('listing_new') }}">
+                        {{ Constant.DROPDOWN_LIST_CREATE_LABEL }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modal"
+                        data-action="{{ path('listing_edit', {id: list.id}) }}">{{ Constant.DROPDOWN_LIST_UPDATE_LABEL }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#deleteModal"
+                        data-action="{{ path('listing_delete', {id: list.id}) }}">{{ Constant.DROPDOWN_LIST_DELETE_LABEL }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             {# Direction #}
@@ -29,8 +47,8 @@
                     data-action="{{ path('item_new') }}">
                     <i class="fas fa-plus-circle"></i>
                 </a>
-                <a data-elt-id="{{ list.id }}" data-direction="up"><i class="fas fa-arrow-left"></i></a>
-                <a data-elt-id="{{ list.id }}" data-direction="down"><i class="fas fa-arrow-right"></i></a>
+                <a data-direction="up"><i class="fas fa-arrow-left"></i></a>
+                <a data-direction="down"><i class="fas fa-arrow-right"></i></a>
             </div>
     </div>
 
@@ -44,9 +62,9 @@
             
             <div class="col-3 p-0 d-flex justify-content-around">
                 <a href="#" data-toggle="modal" 
-                    data-target="#modal" 
-                    data-elt-id="{{ list.id }}"
-                    data-action="{{ path('item_new') }}">
+                    data-target="#modal"
+                    data-list-id="{{ item.listing.id }}"
+                    data-action="{{ path('item_edit', {id: item.id}) }}">
                     <i class="fas fa-pen"></i>
                 </a>
                 <a href="#"><i class="fas fa-arrow-up"></i></a> 

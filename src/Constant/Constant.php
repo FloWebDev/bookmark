@@ -20,6 +20,7 @@ class Constant
     const SUCCESS_ACTION         = 'Action réalisée avec succès';
     const LIST_CREATE_FORM_TITLE = 'Création d\'une liste';
     const LIST_UPDATE_FORM_TITLE = 'Modification de la liste : ';
+    const ITEM_UPDATE_FORM_TITLE = 'Modification du favori : ';
 
     const ITEM_CREATE_FORM_TITLE = 'Ajout d\'un favori';
 

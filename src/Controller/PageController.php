@@ -119,7 +119,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}', name: 'page_delete', methods: ['POST'])]
-    public function delete(Request $request, Page $page): Response
+    public function delete(Request $request, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
@@ -134,6 +134,8 @@ class PageController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);
             $entityManager->flush();
+            $entityManager->refresh($this->getUser());
+            $orderService->refreshOrder($this->getUser()->getPages());
         }
 
         $this->addFlash(

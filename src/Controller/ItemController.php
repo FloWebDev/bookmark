@@ -75,21 +75,47 @@ class ItemController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'item_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Item $item): Response
+    public function edit(Request $request, Item $item, OrderService $orderService): Response
     {
-        $form = $this->createForm(ItemType::class, $item);
-        $form->handleRequest($request);
+        if ($request->isXmlHttpRequest()) {
+            if ($this->getUser()->getId() !== $item->getListing()->getPage()->getUser()->getId()) {
+                return $this->json([
+                    'success'   => false,
+                    'msg'       => Constant::FORBIDDEN
+                ], 403);
+            }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $currentZ           = $item->getZ();
+            $form               = $this->createForm(ItemType::class, $item, [
+                'attr' => [
+                    'id'     => 'editItemForm',
+                    'action' => $this->generateUrl('item_edit', [
+                        'id' => $item->getId()
+                    ])
+                ]
+            ]);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('item_index');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $orderService->handleOrderZ($item, $item->getListing()->getItems(), $currentZ);
+                // Refresh and re-order
+                $this->getDoctrine()->getManager()->refresh($item->getListing());
+                $orderService->refreshOrder($item->getListing()->getItems());
+
+                return $this->json([
+                    'success' => true
+                ]);
+            }
+
+            return $this->json([
+                'success'   => null,
+                'formTitle' => Constant::ITEM_UPDATE_FORM_TITLE . $item->getTitle(),
+                'form'      => $this->renderView('item/_form.html.twig', [
+                    'item' => $item,
+                    'form'    => $form->createView(),
+                ])
+            ]);
         }
-
-        return $this->render('item/edit.html.twig', [
-            'item' => $item,
-            'form' => $form->createView(),
-        ]);
     }
 
     #[Route('/{id}/delete', name: 'item_delete', methods: ['POST'])]

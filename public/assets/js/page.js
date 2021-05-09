@@ -1,5 +1,5 @@
 const page = {
-    currentPage: null,
+    currentListing: null,
     init: () => {
         page.domChangeListener();
         page.getLists();
@@ -33,7 +33,7 @@ const page = {
     },
     displayForm: e => {
         if (e.currentTarget.getAttribute('data-list-id')) {
-            page.currentPage = e.currentTarget.getAttribute('data-list-id');
+            page.currentListing = e.currentTarget.getAttribute('data-list-id');
         }
         const xhr = new XMLHttpRequest();
         xhr.open('GET', e.currentTarget.getAttribute('data-action'), true);
@@ -79,7 +79,7 @@ const page = {
     // Méthode générique à plusieurs entités d'affichage du formulaire de suppression dans la modale
     displayDeleteForm: e => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-elt-id') + '/delete', true);
+        xhr.open('GET', e.currentTarget.getAttribute('data-action'), true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
@@ -154,7 +154,7 @@ const page = {
                         document.querySelector('#deleteModal form').addEventListener('submit', page.handleDeleteForm);
                     }
                     if (document.querySelector('#item_listing')) {
-                        document.querySelector('#item_listing').value = page.currentPage;
+                        document.querySelector('#item_listing').value = page.currentListing;
                     }
                 }
             }

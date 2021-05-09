@@ -103,7 +103,7 @@ class ListingController extends AbstractController
 
                 return $this->json([
                     'success' => true
-                ], 201);
+                ]);
             }
 
             return $this->json([
@@ -118,7 +118,7 @@ class ListingController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'listing_delete', methods: ['GET', 'POST'])]
-    public function delete(Request $request, Listing $listing): Response
+    public function delete(Request $request, Listing $listing, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
             if ($request->isMethod('GET')) {
@@ -141,9 +141,12 @@ class ListingController extends AbstractController
                 }
 
                 if ($this->isCsrfTokenValid('delete'.$listing->getId(), $request->request->get('_token'))) {
+                    $currentPage = $listing->getPage();
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->remove($listing);
                     $entityManager->flush();
+                    $entityManager->refresh($currentPage);
+                    $orderService->refreshOrder($currentPage->getListings());
                 }
 
                 return $this->json([
