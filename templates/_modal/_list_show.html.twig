@@ -15,17 +15,22 @@
                     <i class="fas fa-tools"></i>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item"></a></li>
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#listingModal">{{ Constant.DROPDOWN_LIST_CREATE_LABEL }}</a></li>
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#listingModal" data-list-id="{{ list.id }}">{{ Constant.DROPDOWN_LIST_UPDATE_LABEL }}</a></li>
-                    <li><a class="dropdown-item" data-toggle="modal" data-target="#deleteModal" data-list-id="{{ list.id }}">{{ Constant.DROPDOWN_LIST_DELETE_LABEL }}</a></li>
+                    <li><a class="dropdown-item" data-toggle="modal" data-target="#modal" data-action="{{ path('listing_new') }}">{{ Constant.DROPDOWN_LIST_CREATE_LABEL }}</a></li>
+                    <li><a class="dropdown-item" data-toggle="modal" data-target="#modal" data-elt-id="{{ list.id }}" data-action="{{ path('listing_edit', {id: list.id}) }}">{{ Constant.DROPDOWN_LIST_UPDATE_LABEL }}</a></li>
+                    <li><a class="dropdown-item" data-toggle="modal" data-target="#deleteModal" data-elt-id="{{ list.id }}">{{ Constant.DROPDOWN_LIST_DELETE_LABEL }}</a></li>
                 </ul>
             </div>
             {# Direction #}
             <div class="col-6 text-right">
-                <a class="h5" title="{{ Constant.ITEM_CREATE_LABEL }}"><i class="fas fa-plus-circle"></i></a>
-                <a data-list-id="{{ list.id }}" data-direction="up"><i class="fas fa-arrow-left"></i></a>
-                <a data-list-id="{{ list.id }}" data-direction="down"><i class="fas fa-arrow-right"></i></a>
+                <a class="h5" title="{{ Constant.ITEM_CREATE_LABEL }}"
+                    data-toggle="modal" 
+                    data-target="#modal" 
+                    data-list-id="{{ list.id }}"
+                    data-action="{{ path('item_new') }}">
+                    <i class="fas fa-plus-circle"></i>
+                </a>
+                <a data-elt-id="{{ list.id }}" data-direction="up"><i class="fas fa-arrow-left"></i></a>
+                <a data-elt-id="{{ list.id }}" data-direction="down"><i class="fas fa-arrow-right"></i></a>
             </div>
     </div>
 
@@ -38,7 +43,12 @@
             </div>
             
             <div class="col-3 p-0 d-flex justify-content-around">
-                <a href="#"><i class="fas fa-pen"></i></i></a>
+                <a href="#" data-toggle="modal" 
+                    data-target="#modal" 
+                    data-elt-id="{{ list.id }}"
+                    data-action="{{ path('item_new') }}">
+                    <i class="fas fa-pen"></i>
+                </a>
                 <a href="#"><i class="fas fa-arrow-up"></i></a> 
                 <a href="#"><i class="fas fa-arrow-down"></i></a>
             </div>

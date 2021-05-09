@@ -51,6 +51,11 @@ class Listing
         $this->items      = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->page . ' - ' . $this->title;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,7 +66,7 @@ class Listing
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 

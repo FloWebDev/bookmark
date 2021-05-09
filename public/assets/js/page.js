@@ -1,4 +1,5 @@
 const page = {
+    currentPage: null,
     init: () => {
         page.domChangeListener();
         page.getLists();
@@ -30,25 +31,28 @@ const page = {
             document.querySelector('#listContainer').style = 'block';
         }
     },
-    displayCreateListForm: () => {
+    displayForm: e => {
+        if (e.currentTarget.getAttribute('data-list-id')) {
+            page.currentPage = e.currentTarget.getAttribute('data-list-id');
+        }
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', '/listing/new', true);
+        xhr.open('GET', e.currentTarget.getAttribute('data-action'), true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 page.displayLoader(false);
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    document.querySelector('#listingFormModalLabel').textContent = xhr.response.formTitle;
-                    document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
+                    document.querySelector('#formModalLabel').textContent = xhr.response.formTitle;
+                    document.querySelector('#formContent').innerHTML = xhr.response.form;
                 } else {
-                    console.error('Erreur displayCreateListForm')
+                    console.error('Erreur displayForm')
                 }
             }
         };
         xhr.send();
     },
-    handleListForm: e => {
+    handleSubmitForm: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
         const data = new FormData(e.target);
@@ -62,38 +66,20 @@ const page = {
                         page.closeModal();
                         page.getLists();
                     } else if (!xhr.response.success && xhr.response.form) {
-                        document.querySelector('#listingFormModalLabel').textContent = xhr.response.formTitle;
-                        document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
+                        document.querySelector('#formModalLabel').textContent = xhr.response.formTitle;
+                        document.querySelector('#formContent').innerHTML = xhr.response.form;
                     }
                 } else {
-                    console.error('Erreur handleListForm');
+                    console.error('Erreur handleSubmitForm');
                 }
             }
         };
         xhr.send(data);
     },
-    displayUpdateListForm: e => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-list-id') + '/edit', true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.responseType = 'json';
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                page.displayLoader(false);
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    document.querySelector('#listingFormModalLabel').textContent = xhr.response.formTitle;
-                    document.querySelector('#listingFormContent').innerHTML = xhr.response.form;
-                } else {
-                    console.error('Erreur displayUpdateListForm')
-                }
-            }
-        };
-        xhr.send();
-    },
     // Méthode générique à plusieurs entités d'affichage du formulaire de suppression dans la modale
     displayDeleteForm: e => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-list-id') + '/delete', true);
+        xhr.open('GET', '/listing/' + e.currentTarget.getAttribute('data-elt-id') + '/delete', true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
@@ -147,18 +133,14 @@ const page = {
         const observer = new MutationObserver(mutationsList => {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
-                    if (document.querySelector('[data-target="#listingModal"]')) {
-                        document.querySelectorAll('[data-target="#listingModal"]').forEach(elt => {
-                            if (!elt.getAttribute('data-list-id')) {
-                                elt.addEventListener('click', page.displayCreateListForm);
-                            } else {
-                                elt.addEventListener('click', page.displayUpdateListForm);
-                            }
+                    if (document.querySelector('[data-target="#modal"]')) {
+                        document.querySelectorAll('[data-target="#modal"]').forEach(elt => {
+                            elt.addEventListener('click', page.displayForm);
                         });
 
                     }
-                    if (document.querySelector('#listingFormContent')) {
-                        document.querySelector('#listingFormContent').addEventListener('submit', page.handleListForm)
+                    if (document.querySelector('#formContent')) {
+                        document.querySelector('#formContent').addEventListener('submit', page.handleSubmitForm)
                     }
                     if (document.querySelector('#listing_page')) {
                         document.querySelector('#listing_page').value = document.querySelector('section[data-page-id]').getAttribute('data-page-id');
@@ -170,6 +152,9 @@ const page = {
                     }
                     if (document.querySelector('#deleteModal form')) {
                         document.querySelector('#deleteModal form').addEventListener('submit', page.handleDeleteForm);
+                    }
+                    if (document.querySelector('#item_listing')) {
+                        document.querySelector('#item_listing').value = page.currentPage;
                     }
                 }
             }

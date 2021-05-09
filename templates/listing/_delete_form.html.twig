@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('listing_delete', {'id': listing.id}) }}">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ listing.id) }}">
-    <button class="btn btn-danger">Delete</button>
+    <button class="btn btn-danger">{{ Constant.DELETE_ACTION }}</button>
 </form>
