@@ -40,6 +40,10 @@ class OrderService
 
     public function refreshOrder($entities)
     {
+        if (empty($entities[0])) {
+            return;
+        }
+
         if (!method_exists($entities[0]::class, 'setZ')) {
             throw new \Exception('Erreur sur refreshOrder');
         }

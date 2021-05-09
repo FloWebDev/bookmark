@@ -80,6 +80,6 @@
 </div>
 {% else %}
     <p class="col-12 text-light ml-3 mt-2 text-center">
-        <a class="btn btn-light bg-dark" data-toggle="modal" data-target="#listingModal"><i class="fas fa-plus-circle"></i> {{ Constant.LIST_CREATE_LABEL }}</a>
+        <a class="btn btn-light bg-dark" data-toggle="modal" data-target="#modal" data-action="{{ path('listing_new') }}"><i class="fas fa-plus-circle"></i> {{ Constant.LIST_CREATE_LABEL }}</a>
     </p>
 {% endfor %}
