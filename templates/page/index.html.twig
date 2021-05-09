@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1 class="text-light">{{ Constant.PAGES_LIST_INDEX }} 
-    <a href="{{ path('page_new') }}" type="button" class="btn btn-dark p-0 px-1"><i class="fas fa-plus-square"></i></a></h1>
+    <a href="{{ path('page_new') }}" type="button" class="btn btn-dark text-info p-0 px-1"><i class="fas fa-plus-square"></i></a></h1>
 
     <table class="table">
         <thead>
@@ -20,9 +20,16 @@
                 <td>{{ page.title }}</td>
                 <td>{{ page.z }}</td>
                 <td>
+
                     <a href="{{ path('page_show', {'user_id': page.user.id, 'z': page.z}) }}"><i class="far fa-eye"></i></a>
                     <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-pen"></i></a>
-                    {% include 'page/_delete_modal.html.twig' %}
+                    {% include 'page/_delete_modal.html.twig' %} - 
+                    {% if loop.first == false %}
+                    <a href="{{ path('page_order', {id: page.id, direction: 'up'}) }}"><i class="fas fa-arrow-up"></i></a>
+                    {% endif %}
+                    {% if loop.last == false %}
+                    <a href="{{ path('page_order', {id: page.id, direction: 'down'}) }}"><i class="fas fa-arrow-down"></i></a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

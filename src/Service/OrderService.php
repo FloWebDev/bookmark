@@ -54,4 +54,33 @@ class OrderService
 
         $this->em->flush();
     }
+
+    public function handleUpAndDownPosition($entity, $entities, $direction)
+    {
+        if (!method_exists($entity::class, 'getZ') || !method_exists($entity::class, 'setZ')
+        || !method_exists($entities[0]::class, 'getZ') || !method_exists($entities[0]::class, 'setZ')) {
+            throw new \Exception('Erreur sur handleUpAndDownPosition');
+        }
+
+        if ($direction === 'up') {
+            dump('up');
+            $entityIndex = array_search($entity, $entities);
+            if ($entityIndex !== false && isset($entities[$entityIndex - 1])) {
+                $entities[$entityIndex - 1]->setZ($entity->getZ());
+            }
+            $entity->setZ($entity->getZ() - 1);
+        } else {
+            dump('down');
+            $entityIndex = array_search($entity, $entities);
+            dump($entityIndex);
+            if ($entityIndex !== false && isset($entities[$entityIndex + 1])) {
+                dump($entities[$entityIndex + 1]);
+                dump($entity->getZ());
+                $entities[$entityIndex + 1]->setZ($entity->getZ());
+            }
+            $entity->setZ($entity->getZ() + 1);
+        }
+
+        $this->em->flush();
+    }
 }

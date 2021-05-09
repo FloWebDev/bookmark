@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class PageType extends AbstractType
 {
@@ -29,17 +29,13 @@ class PageType extends AbstractType
                     ])
                 ]
             ])
-            ->add('z', IntegerType::class, [
-                'label' => 'Ordre dans la liste',
-                'attr'  => [
-                    'min' => 1,
-                    'max' => 100
+            ->add('position', ChoiceType::class, [
+                'label'    => 'Position',
+                'mapped'   => false,
+                'choices'  => [
+                    'Fin du menu'   => 'end',
+                    'Début du menu' => 'start'
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
-                    ])
-                ]
             ])
         ;
     }

@@ -2,7 +2,7 @@
     width: 350px;
     height: 350px;
     border: 15px solid;
-    border-color: #343a40 #428bca;
+    border-color: var(--main-bg-color) var(--second-bg-color-spinner);
     border-radius: 50%;
     animation: spin 1.5s infinite linear;
     position: fixed;

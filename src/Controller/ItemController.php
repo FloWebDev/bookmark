@@ -45,7 +45,12 @@ class ItemController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $item->setZ(count($item->getListing()->getItems()) + 2);
+                if ($form->get('position')->getData() === 'end') {
+                    $item->setZ(count($item->getListing()->getItems()) + 2);
+                } else {
+                    $item->setZ(0);
+                }
+                
                 $entityManager->persist($item);
                 $entityManager->flush();
                 $orderService->refreshOrder($item->getListing()->getItems());
@@ -144,6 +149,28 @@ class ItemController extends AbstractController
                 'success' => false,
                 'msg'     => Constant::FORBIDDEN
             ], 403);
+        }
+    }
+
+    #[Route('/{id}/order/{direction}', name: 'item_order', methods: ['POST'])]
+    public function order($id, $direction, Request $request, Item $item, OrderService $orderService): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            if (!$this->getUser() || ($this->getUser()->getId() !== $item->getListing()->getPage()->getUser()->getId()
+                    && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+                return $this->json([
+                    'success' => false,
+                    'msg'     => Constant::FORBIDDEN
+                ], 403);
+            }
+
+            $orderService->handleUpAndDownPosition($item, $item->getListing()->getItems()->toArray(), $direction);
+            $this->getDoctrine()->getManager()->refresh($item->getListing());
+            $orderService->refreshOrder($item->getListing()->getItems());
+
+            return $this->json([
+                'success'   => true
+            ]);
         }
     }
 }

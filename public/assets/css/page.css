@@ -4,18 +4,17 @@
 }
 
 #listContainer ul li a {
-    color: rgb(44, 42, 70);
+    color: var(--main-bg-color);
 }
 
 .list-header {
-    background-color: #428bca;
+    background-color: var(--main-bg-color);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
 .menu-header {
-    background-color: #428bca;
-    /* border: 1px solid black; */
+    background-color: var(--main-bg-color);
 }
 
 .menu-header .dropdown-toggle {
@@ -40,4 +39,8 @@
 
 .h5container {
     overflow: hidden;
+}
+
+.item-create:hover {
+    color: green;
 }

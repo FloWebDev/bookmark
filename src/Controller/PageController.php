@@ -22,7 +22,7 @@ class PageController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('page/index.html.twig', [
             'pageTitle' => Constant::PAGES_LIST_INDEX,
-            'pages' => $this->getUser()->getPages()
+            'pages'     => $this->getUser()->getPages()
         ]);
     }
 
@@ -38,10 +38,15 @@ class PageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $page->setUser($this->getUser());
-            $page->setZ($page->getZ() - 1); // -1 pour positionner au-dessus de l'élément existant d'un cran
+            if ($form->get('position')->getData() === 'end') {
+                $page->setZ(count($page->getUser()->getPages()) + 2);
+            } else {
+                $page->setZ(0);
+            }
+
             $entityManager->persist($page);
             $entityManager->flush();
-            $orderService->refreshOrder($this->getUser()->getPages());
+            $orderService->refreshOrder($page->getUser()->getPages());
 
             return $this->redirectToRoute('page_index');
         }
@@ -70,7 +75,7 @@ class PageController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
-                'msg' => Constant::DASHBOARD_SENTENCE,
+                'msg'     => Constant::DASHBOARD_SENTENCE,
                 'form'    => $this->renderView('_modal/_list_show.html.twig', [
                     'page' => $page
                 ])
@@ -142,6 +147,25 @@ class PageController extends AbstractController
             'success',
             Constant::SUCCESS_ACTION
         );
+
+        return $this->redirectToRoute('page_index');
+    }
+
+    #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'])]
+    public function order($id, $direction, Request $request, Page $page, OrderService $orderService): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if (!$this->getUser() || ($this->getUser()->getId() !== $page->getUser()->getId()
+                    && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+            return $this->json([
+                'success' => false,
+                'msg'     => Constant::FORBIDDEN
+            ], 403);
+        }
+
+        $orderService->handleUpAndDownPosition($page, $page->getUser()->getPages()->toArray(), $direction);
+        $this->getDoctrine()->getManager()->refresh($page->getUser());
+        $orderService->refreshOrder($page->getUser()->getPages());
 
         return $this->redirectToRoute('page_index');
     }

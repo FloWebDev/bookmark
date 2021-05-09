@@ -17,3 +17,8 @@ form {
     padding: 1.5rem;
     background-color: #FFFFFF;
 }
+
+:root {
+    --main-bg-color: #131e27;
+    --second-bg-color-spinner: #b0d7f8;
+}

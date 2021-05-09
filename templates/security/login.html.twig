@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ Constant.SIGN_IN }}{% endblock %}
 
 {% block body %}
-<form method="post" class="col-10 col-md-4 mx-auto mt-5 p-0" novalidate>
+<form method="post" id="loginForm" class="col-10 col-md-4 mx-auto mt-5 p-3" novalidate>
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">{{ Constant.SIGN_OUT }}</a>
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal"><i class="fas fa-user-astronaut"></i> Connexion</h1>
+    <h1 class="h3 mb-3 font-weight-normal"><i class="fas fa-user-astronaut"></i> {{ Constant.SIGN_IN }}</h1>
     <label for="inputUsername">Identifiant</label>
     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control mb-3" required autofocus>
     <label for="inputPassword">Mot de passe</label>
@@ -35,6 +35,6 @@
         </div>
     #}
 
-    <input class="btn btn-lg btn-dark mx-auto" type="submit" value="valider">
+    <input class="btn btn-lg btn-dark mx-auto" type="submit" value="{{ Constant.SIGN_IN }}">
 </form>
 {% endblock %}

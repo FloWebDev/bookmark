@@ -3,5 +3,5 @@ nav {
 }
 
 nav {
-    background-color: #428bca;
+    background-color: var(--main-bg-color);
 }

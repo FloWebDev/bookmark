@@ -12,6 +12,8 @@ class Constant
     const PAGES_LIST_INDEX = 'Liste des pages';
     const BACK_TO_LIST     = 'Retour à la liste';
 
+    const SIGN_IN = 'Connexion';
+    const SIGN_OUT = 'Déconnexion';
     const DELETE_ACTION = 'Supprimer';
     const SUBMIT_ACTION = 'Valider';
     const CANCEL_ACTION = 'Fermer';
@@ -31,7 +33,9 @@ class Constant
     const LIST_DELETE_MODAL_ALERT = '<b>Attention : </b><br>La suppression d\'une liste entraîne la suppression de tous les items associés.';
     const ITEM_DELETE_MODAL_ALERT = 'Confirmez la suppression du favori.';
 
+    const PAGE_CREATE_TITLE = 'Création Page';
     const PAGE_UPDATE_TITLE = 'Modification Page';
+
 
     const DROPDOWN_ITEM_CREATE_LABEL = 'Ajouter lien';
     const DROPDOWN_LIST_CREATE_LABEL = 'Créer liste';

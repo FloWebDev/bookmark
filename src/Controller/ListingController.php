@@ -44,7 +44,12 @@ class ListingController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $listing->setZ($listing->getZ() - 1); // -1 pour positionner au-dessus de l'élément existant d'un cran
+                if ($form->get('position')->getData() === 'end') {
+                    $listing->setZ(count($listing->getPage()->getListings()) + 2);
+                } else {
+                    $listing->setZ(0);
+                }
+
                 $entityManager->persist($listing);
                 $entityManager->flush();
                 $orderService->refreshOrder($listing->getPage()->getListings());
@@ -141,7 +146,7 @@ class ListingController extends AbstractController
                 }
 
                 if ($this->isCsrfTokenValid('delete'.$listing->getId(), $request->request->get('_token'))) {
-                    $currentPage = $listing->getPage();
+                    $currentPage   = $listing->getPage();
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->remove($listing);
                     $entityManager->flush();
@@ -153,6 +158,28 @@ class ListingController extends AbstractController
                     'success'   => true
                 ]);
             }
+        }
+    }
+
+    #[Route('/{id}/order/{direction}', name: 'listing_order', methods: ['POST'])]
+    public function order($id, $direction, Request $request, Listing $listing, OrderService $orderService): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            if (!$this->getUser() || ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()
+                    && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+                return $this->json([
+                    'success' => false,
+                    'msg'     => Constant::FORBIDDEN
+                ], 403);
+            }
+
+            $orderService->handleUpAndDownPosition($listing, $listing->getPage()->getListings()->toArray(), $direction);
+            $this->getDoctrine()->getManager()->refresh($listing->getPage());
+            $orderService->refreshOrder($listing->getPage()->getListings());
+
+            return $this->json([
+                'success'   => true
+            ]);
         }
     }
 }

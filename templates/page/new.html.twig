@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Création Page{% endblock %}
+{% block title %}{{ Constant.PAGE_CREATE_TITLE }}{% endblock %}
 
 {% block body %}
-    <h1 class="col-12">Création Page</h1>
+    <h1 class="col-12 text-light">{{ Constant.PAGE_CREATE_TITLE }}</h1>
 
     {{ include('page/_form.html.twig') }}
 

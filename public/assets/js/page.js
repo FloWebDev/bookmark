@@ -142,6 +142,26 @@ const page = {
         };
         xhr.send(data);
     },
+    handleUpAndDown: e => {
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', e.currentTarget.getAttribute('data-action'), true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    page.getLists();
+                    if (!xhr.response.success) {
+                        console.error('Erreur handleUpAndDown');
+                    }
+                } else {
+                    console.error('Erreur handleUpAndDown');
+                }
+            }
+        };
+        xhr.send();
+    },
     domChangeListener: () => {
         // Selectionne le noeud dont les mutations seront observées
         const targetNode = document.querySelector('section');
@@ -183,6 +203,11 @@ const page = {
                     if (document.querySelector('.itemDeleteBtn')) {
                         document.querySelectorAll('.itemDeleteBtn').forEach(elt => {
                             elt.addEventListener('click', page.handleItemDeleteClick);
+                        });
+                    }
+                    if (document.querySelector('.change-order')) {
+                        document.querySelectorAll('.change-order').forEach(elt => {
+                            elt.addEventListener('click', page.handleUpAndDown);
                         });
                     }
                 }

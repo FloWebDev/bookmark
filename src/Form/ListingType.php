@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ListingType extends AbstractType
 {
@@ -40,19 +40,6 @@ class ListingType extends AbstractType
                     ])
                 ]
             ])
-            ->add('z', IntegerType::class, [
-                'label'         => 'Ordre dans la liste',
-                'attr'          => [
-                    'min' => 1,
-                    'max' => 100
-                ],
-                'empty_data'        => 1,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
-                    ])
-                ]
-            ])
             ->add('page', EntityType::class, [
                 'label'         => 'Page',
                 'class'         => Page::class,
@@ -62,6 +49,14 @@ class ListingType extends AbstractType
                                 ->orderBy('p.z', 'ASC');
                 },
                 'choice_label' => 'title'
+            ])
+            ->add('position', ChoiceType::class, [
+                'label'    => 'Position',
+                'mapped'   => false,
+                'choices'  => [
+                    'Fin de page'   => 'end',
+                    'Début de page' => 'start'
+                ],
             ])
         ;
     }
