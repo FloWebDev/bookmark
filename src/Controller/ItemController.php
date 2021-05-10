@@ -53,6 +53,7 @@ class ItemController extends AbstractController
                 
                 $entityManager->persist($item);
                 $entityManager->flush();
+                $entityManager->refresh($item->getListing());
                 $orderService->refreshOrder($item->getListing()->getItems());
 
                 return $this->json([
@@ -90,7 +91,6 @@ class ItemController extends AbstractController
                 ], 403);
             }
 
-            $currentZ           = $item->getZ();
             $form               = $this->createForm(ItemType::class, $item, [
                 'attr' => [
                     'id'     => 'editItemForm',
@@ -102,9 +102,11 @@ class ItemController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $orderService->handleOrderZ($item, $item->getListing()->getItems(), $currentZ);
-                // Refresh and re-order
-                $this->getDoctrine()->getManager()->refresh($item->getListing());
+                $entityManager = $this->getDoctrine()->getManager();
+                $item->setZ(count($item->getListing()->getItems()) + 2);
+                $entityManager->flush();
+
+                $entityManager->refresh($item->getListing());
                 $orderService->refreshOrder($item->getListing()->getItems());
 
                 return $this->json([
@@ -124,7 +126,7 @@ class ItemController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'item_delete', methods: ['POST'])]
-    public function delete(Request $request, Item $item): Response
+    public function delete(Request $request, Item $item, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
             if (!$this->getUser() || ($this->getUser()->getId() !== $item->getListing()->getPage()->getUser()->getId()
@@ -136,9 +138,12 @@ class ItemController extends AbstractController
             }
 
             if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
+                $listing       = $item->getListing();
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($item);
                 $entityManager->flush();
+                $entityManager->refresh($listing);
+                $orderService->refreshOrder($listing->getItems());
 
                 return $this->json([
                     'success'   => true
@@ -153,7 +158,7 @@ class ItemController extends AbstractController
     }
 
     #[Route('/{id}/order/{direction}', name: 'item_order', methods: ['POST'])]
-    public function order($id, $direction, Request $request, Item $item, OrderService $orderService): Response
+    public function order($direction, $id, Request $request, Item $item, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
             if (!$this->getUser() || ($this->getUser()->getId() !== $item->getListing()->getPage()->getUser()->getId()

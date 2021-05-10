@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Page;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
@@ -36,8 +38,18 @@ class PageType extends AbstractType
                     'Fin du menu'   => 'end',
                     'Début du menu' => 'start'
                 ],
-            ])
-        ;
+            ])->addEventListener(
+                FormEvents::POST_SET_DATA,
+                function (FormEvent $event) {
+                    $page = $event->getData();
+                    $form = $event->getForm();
+
+                    // Dans le cas d'un update
+                    if (!is_null($page->getId())) {
+                        $form->remove('position');
+                    }
+                }
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

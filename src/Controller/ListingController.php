@@ -52,6 +52,7 @@ class ListingController extends AbstractController
 
                 $entityManager->persist($listing);
                 $entityManager->flush();
+                $this->getDoctrine()->getManager()->refresh($listing->getPage());
                 $orderService->refreshOrder($listing->getPage()->getListings());
 
                 return $this->json([
@@ -79,7 +80,7 @@ class ListingController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'listing_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Listing $listing, OrderService $orderService): Response
+    public function edit(Request $request, Listing $listing): Response
     {
         if ($request->isXmlHttpRequest()) {
             if ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()) {
@@ -89,7 +90,6 @@ class ListingController extends AbstractController
                 ], 403);
             }
 
-            $currentZ           = $listing->getZ();
             $form               = $this->createForm(ListingType::class, $listing, [
                 'attr' => [
                     'id'     => 'editListForm',
@@ -101,10 +101,7 @@ class ListingController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $orderService->handleOrderZ($listing, $listing->getPage()->getListings(), $currentZ);
-                // Refresh and re-order
-                $this->getDoctrine()->getManager()->refresh($listing->getPage());
-                $orderService->refreshOrder($listing->getPage()->getListings());
+                $this->getDoctrine()->getManager()->flush();
 
                 return $this->json([
                     'success' => true
@@ -162,7 +159,7 @@ class ListingController extends AbstractController
     }
 
     #[Route('/{id}/order/{direction}', name: 'listing_order', methods: ['POST'])]
-    public function order($id, $direction, Request $request, Listing $listing, OrderService $orderService): Response
+    public function order($direction, Request $request, Listing $listing, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
             if (!$this->getUser() || ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()

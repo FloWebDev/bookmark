@@ -46,6 +46,7 @@ class PageController extends AbstractController
 
             $entityManager->persist($page);
             $entityManager->flush();
+            $this->getDoctrine()->getManager()->refresh($page->getUser());
             $orderService->refreshOrder($page->getUser()->getPages());
 
             return $this->redirectToRoute('page_index');
@@ -88,7 +89,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Page $page, OrderService $orderService): Response
+    public function edit(Request $request, Page $page): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
@@ -99,15 +100,11 @@ class PageController extends AbstractController
             return $this->redirectToRoute('page_index');
         }
 
-        $currentZ           = $page->getZ();
-        $form               = $this->createForm(PageType::class, $page);
+        $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $orderService->handleOrderZ($page, $this->getUser()->getPages(), $currentZ);
-            // Refresh and re-order
-            $this->getDoctrine()->getManager()->refresh($this->getUser());
-            $orderService->refreshOrder($this->getUser()->getPages());
+            $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash(
                 'success',
@@ -136,11 +133,12 @@ class PageController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
+            $user = $page->getUser();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);
             $entityManager->flush();
-            $entityManager->refresh($this->getUser());
-            $orderService->refreshOrder($this->getUser()->getPages());
+            $entityManager->refresh($user);
+            $orderService->refreshOrder($user->getPages());
         }
 
         $this->addFlash(
@@ -152,7 +150,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'])]
-    public function order($id, $direction, Request $request, Page $page, OrderService $orderService): Response
+    public function order($direction, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if (!$this->getUser() || ($this->getUser()->getId() !== $page->getUser()->getId()

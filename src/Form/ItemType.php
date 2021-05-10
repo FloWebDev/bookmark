@@ -5,17 +5,19 @@ namespace App\Form;
 use App\Entity\Item;
 use App\Entity\Listing;
 use App\Repository\ListingRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ItemType extends AbstractType
@@ -91,8 +93,18 @@ class ItemType extends AbstractType
                         'maxMessage' => 'Nombre de caractères maximum autorisés : {{ limit }}'
                     ])
                 ]
-            ])
-        ;
+            ])->addEventListener(
+                FormEvents::POST_SET_DATA,
+                function (FormEvent $event) {
+                    $item = $event->getData();
+                    $form = $event->getForm();
+
+                    // Dans le cas d'un update
+                    if (!is_null($item->getId())) {
+                        $form->remove('position');
+                    }
+                }
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

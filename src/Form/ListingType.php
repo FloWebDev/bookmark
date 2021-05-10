@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Page;
 use App\Entity\Listing;
 use App\Repository\PageRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -57,8 +59,19 @@ class ListingType extends AbstractType
                     'Fin de page'   => 'end',
                     'Début de page' => 'start'
                 ],
-            ])
-        ;
+            ])->addEventListener(
+                FormEvents::POST_SET_DATA,
+                function (FormEvent $event) {
+                    $listing = $event->getData();
+                    $form = $event->getForm();
+
+                    // Dans le cas d'un update
+                    if (!is_null($listing->getId())) {
+                        $form->remove('page')
+                        ->remove('position');
+                    }
+                }
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
