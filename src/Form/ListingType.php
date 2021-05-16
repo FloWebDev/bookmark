@@ -60,7 +60,7 @@ class ListingType extends AbstractType
                     'Début de page' => 'start'
                 ],
             ])->addEventListener(
-                FormEvents::POST_SET_DATA,
+                FormEvents::PRE_SET_DATA,
                 function (FormEvent $event) {
                     $listing = $event->getData();
                     $form = $event->getForm();

@@ -91,6 +91,8 @@ class ItemController extends AbstractController
                 ], 403);
             }
 
+            $currentListing = $item->getListing();
+
             $form               = $this->createForm(ItemType::class, $item, [
                 'attr' => [
                     'id'     => 'editItemForm',
@@ -103,7 +105,9 @@ class ItemController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $item->setZ(count($item->getListing()->getItems()) + 2);
+                if($form->get('listing')->getData()->getId() !== $currentListing->getId()) {
+                    $item->setZ(count($item->getListing()->getItems()) + 2);
+                }
                 $entityManager->flush();
 
                 $entityManager->refresh($item->getListing());

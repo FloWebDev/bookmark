@@ -94,7 +94,7 @@ class ItemType extends AbstractType
                     ])
                 ]
             ])->addEventListener(
-                FormEvents::POST_SET_DATA,
+                FormEvents::PRE_SET_DATA,
                 function (FormEvent $event) {
                     $item = $event->getData();
                     $form = $event->getForm();

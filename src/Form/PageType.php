@@ -39,7 +39,7 @@ class PageType extends AbstractType
                     'Début du menu' => 'start'
                 ],
             ])->addEventListener(
-                FormEvents::POST_SET_DATA,
+                FormEvents::PRE_SET_DATA,
                 function (FormEvent $event) {
                     $page = $event->getData();
                     $form = $event->getForm();
