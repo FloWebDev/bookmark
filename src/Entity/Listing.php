@@ -53,7 +53,7 @@ class Listing
 
     public function __toString()
     {
-        return $this->page . ' - ' . $this->title;
+        return $this->title;
     }
 
     public function getId(): ?int

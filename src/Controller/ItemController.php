@@ -10,6 +10,7 @@ use App\Repository\ItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/item')]
@@ -24,7 +25,7 @@ class ItemController extends AbstractController
     }
 
     #[Route('/new', name: 'item_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, OrderService $orderService): Response
+    public function new(Request $request, OrderService $orderService, SessionInterface $session): Response
     {
         if ($request->isXmlHttpRequest()) {
             if (!$this->getUser()) {
@@ -36,6 +37,7 @@ class ItemController extends AbstractController
 
             $item = new Item();
             $form = $this->createForm(ItemType::class, $item, [
+                'page_id' => $session->get('page_id'),
                 'attr' => [
                     'id'     => 'createItemForm',
                     'action' => $this->generateUrl('item_new')
@@ -81,7 +83,7 @@ class ItemController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'item_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Item $item, OrderService $orderService): Response
+    public function edit(Request $request, Item $item, OrderService $orderService, SessionInterface $session): Response
     {
         if ($request->isXmlHttpRequest()) {
             if ($this->getUser()->getId() !== $item->getListing()->getPage()->getUser()->getId()) {
@@ -94,6 +96,7 @@ class ItemController extends AbstractController
             $currentListing = $item->getListing();
 
             $form               = $this->createForm(ItemType::class, $item, [
+                'page_id' => $session->get('page_id'),
                 'attr' => [
                     'id'     => 'editItemForm',
                     'action' => $this->generateUrl('item_edit', [

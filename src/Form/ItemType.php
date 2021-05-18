@@ -32,19 +32,6 @@ class ItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, [
-                'label'       => 'Titre',
-                'attr'        => ['placeholder' => 'Titre'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
-                    ]),
-                    new Length([
-                        'max'        => 500,
-                        'maxMessage' => 'Nombre de caractères maximum attendus : {{ limit }}'
-                    ])
-                ]
-            ])
             ->add('url', UrlType::class, [
                 'label'       => 'URL',
                 'attr'        => ['placeholder' => 'https://www.google.com/'],
@@ -59,20 +46,16 @@ class ItemType extends AbstractType
                     ])
                 ]
             ])
-            ->add('listing', EntityType::class, [
-                'label'         => 'Liste',
-                'class'         => Listing::class,
-                'query_builder' => function (ListingRepository $pr) {
-                    return $pr->createQueryBuilder('l')
-                    ->join('l.page', 'p')
-                    ->where('p.user = ' . $this->security->getUser()->getId())
-                    ->orderBy('p.z', 'ASC', )
-                    ->addOrderBy('l.z', 'ASC');
-                },
-                'choice_label' => 'title',
-                'constraints'  => [
+            ->add('title', TextType::class, [
+                'label'       => 'Titre',
+                'attr'        => ['placeholder' => 'Titre'],
+                'constraints' => [
                     new NotBlank([
                         'message' => 'Ce champ ne doit pas être vide'
+                    ]),
+                    new Length([
+                        'max'        => 500,
+                        'maxMessage' => 'Nombre de caractères maximum attendus : {{ limit }}'
                     ])
                 ]
             ])
@@ -94,14 +77,41 @@ class ItemType extends AbstractType
                     ])
                 ]
             ])->addEventListener(
-                FormEvents::PRE_SET_DATA,
+                FormEvents::POST_SET_DATA,
                 function (FormEvent $event) {
                     $item = $event->getData();
                     $form = $event->getForm();
+                    $this->pageId = $event->getForm()->getConfig()->getOption('page_id');
+
+                    // dd($pageId);
+
 
                     // Dans le cas d'un update
                     if (!is_null($item->getId())) {
                         $form->remove('position');
+                    }
+
+                    if (!is_null($this->pageId)) {
+                        $form->add('listing', EntityType::class, [
+                            'label'         => 'Liste',
+                            'class'         => Listing::class,
+                            'query_builder' => function (ListingRepository $pr) {
+                                return $pr->createQueryBuilder('l')
+                                ->join('l.page', 'p')
+                                ->where('p.user = ' . $this->security->getUser()->getId())
+                                ->andWhere('p.id = ' . $this->pageId)
+                                ->orderBy('p.z', 'ASC', )
+                                ->addOrderBy('l.z', 'ASC');
+                            },
+                            'choice_label' => function ($listing) {
+                                return $listing->getPage()->getTitle() . ' - ' . $listing->getTitle();
+                            },
+                            'constraints'  => [
+                                new NotBlank([
+                                    'message' => 'Ce champ ne doit pas être vide'
+                                ])
+                            ]
+                        ]);
                     }
                 }
             );
@@ -111,6 +121,7 @@ class ItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Item::class,
+            'page_id'    => null
         ]);
     }
 }

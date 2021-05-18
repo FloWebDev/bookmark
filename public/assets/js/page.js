@@ -1,9 +1,11 @@
 const page = {
     currentListing: null,
+    // Méthode d'initialisation
     init: () => {
         page.domChangeListener();
         page.getLists();
     },
+    // Méthode de récupération de toutes les listes + items
     getLists: () => {
         page.displayLoader(true);
         const xhr = new XMLHttpRequest();
@@ -22,6 +24,7 @@ const page = {
         };
         xhr.send();
     },
+    // Méthode permettant d'activer/désactiver le spinner/loader
     displayLoader: (bool) => {
         if (bool) {
             document.querySelector('#loaderContainer').style.display = 'block';
@@ -31,6 +34,7 @@ const page = {
             document.querySelector('#listContainer').style = 'block';
         }
     },
+    // Méthode générique permettant d'afficher un formulaire
     displayForm: e => {
         if (e.currentTarget.getAttribute('data-list-id')) {
             page.currentListing = e.currentTarget.getAttribute('data-list-id');
@@ -41,7 +45,6 @@ const page = {
         xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                page.displayLoader(false);
                 if (xhr.status >= 200 && xhr.status < 300) {
                     document.querySelector('#formModalLabel').textContent = xhr.response.formTitle;
                     document.querySelector('#formContent').innerHTML = xhr.response.form;
@@ -52,6 +55,7 @@ const page = {
         };
         xhr.send();
     },
+    // Méthode générique permettant de traiter la soumission d'un formulaire
     handleSubmitForm: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
@@ -76,7 +80,7 @@ const page = {
         };
         xhr.send(data);
     },
-    // Méthode générique à plusieurs entités d'affichage du formulaire de suppression dans la modale
+    // Méthode générique permettant l'affichage d'un formulaire de suppression dans la modale
     displayDeleteForm: e => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', e.currentTarget.getAttribute('data-action'), true);
@@ -95,7 +99,7 @@ const page = {
         };
         xhr.send();
     },
-    // Méthode générique à plusieurs entités du traitement de la soummission du formulaire de suppression présent dans la modale
+    // Méthode générique permettant de traiter la soumission d'un formulaire de suppresion présent dans une modale
     handleDeleteForm: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
@@ -118,7 +122,7 @@ const page = {
         };
         xhr.send(data);
     },
-    // Méthode de suppression spécifique aux items
+    // Méthode de suppression spécifique aux items (ne dépendant pas d'un formulaire)
     handleItemDeleteClick: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
@@ -142,6 +146,7 @@ const page = {
         };
         xhr.send(data);
     },
+    // Méthode permettant de gérer les changements dans l'ordre
     handleUpAndDown: e => {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
@@ -162,8 +167,9 @@ const page = {
         };
         xhr.send();
     },
+    // Méthode permettant de gérer les écouteurs sur des éléments créés APRES le chargement du DOM initial (utilise MutationObserver)
     domChangeListener: () => {
-        // Selectionne le noeud dont les mutations seront observées
+        // Sélectionne le noeud dont les mutations seront observées
         const targetNode = document.querySelector('section');
 
         // Options de l'observateur (quelles sont les mutations à observer)
@@ -173,7 +179,7 @@ const page = {
             subtree: true
         };
 
-        // Créé une instance de l'observateur lié à la fonction de callback
+        // Crée une instance de l'observateur lié à la fonction de callback
         const observer = new MutationObserver(mutationsList => {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
@@ -210,6 +216,10 @@ const page = {
                             elt.addEventListener('click', page.handleUpAndDown);
                         });
                     }
+                    if (document.querySelector('#item_url')) {
+                        document.querySelector('#item_url').addEventListener('change', page.getTitlePageFromExternalUrl);
+                        // document.querySelector('#item_title').addEventListener('change', page.getTitlePageFromExternalUrl);
+                    }
                 }
             }
         });
@@ -217,10 +227,37 @@ const page = {
         // Commence à observer le noeud cible pour les mutations précédemment configurées
         observer.observe(targetNode, config);
     },
+    // Méthode permettant de fermer l'ensemble des modales
     closeModal: () => {
         document.querySelectorAll('button[data-dismiss="modal"').forEach(elt => {
             elt.click();
         });
+    },
+    // Méthode permettant d'obtenir le titre d'une page à partir d'un lien externe et d'effectuer l'autocomplétion dans
+    // le champ titre du formulaire de l'item
+    getTitlePageFromExternalUrl: e => {
+        const url = e.target.value;
+        if (url.length > 10 && url.startsWith('http://') || url.startsWith('https://')) {
+            const xhr = new XMLHttpRequest();
+            data = new FormData();
+            data.set('url', url);
+            xhr.open('POST', titlePageService, true); // titlePageService définie dans base.html.twig
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.responseType = 'json';
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    // https://ourcodeworld.com/articles/read/188/encode-and-decode-html-entities-using-pure-javascript
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        if (xhr.response) {
+                            document.querySelector('#item_title').value = xhr.response.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+                        }
+                    } else {
+                        console.error('Erreur getTitlePageFromExternalUrl')
+                    }
+                }
+            };
+            xhr.send(data);
+        }
     }
 };
 document.addEventListener('DOMContentLoaded', page.init);

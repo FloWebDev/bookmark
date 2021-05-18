@@ -1,5 +1,5 @@
 <div class="col-12 text-right">
-    <button class="btn btn-danger itemDeleteBtn" data-csrf="{{ csrf_token('delete' ~ item.id) }}" data-action="{{ path('item_delete', {'id': item.id}) }}"><i class="fas fa-trash-alt"></i></button>
+    <span class="btn btn-danger itemDeleteBtn" data-csrf="{{ csrf_token('delete' ~ item.id) }}" data-action="{{ path('item_delete', {'id': item.id}) }}"><i class="fas fa-trash-alt"></i></span>
 </div>
 
 

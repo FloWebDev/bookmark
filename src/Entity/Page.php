@@ -53,7 +53,7 @@ class Page
 
     public function __toString()
     {
-        return $this->z . ' - ' . $this->title;
+        return $this->title;
     }
 
     public function getId(): ?int

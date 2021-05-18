@@ -6,10 +6,12 @@ use App\Entity\Page;
 use App\Form\PageType;
 use App\Constant\Constant;
 use App\Service\OrderService;
+use App\Service\ScraperService;
 use App\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -58,11 +60,11 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{user_id}/page/{z}', name: 'page_show', methods: ['GET'])]
+    #[Route('/user/{user_id}/order/{z}', name: 'page_show', methods: ['GET'])]
     /**
      * @ParamConverter("page", options={"mapping": {"user_id": "user", "z": "z"}})
      */
-    public function show(Page $page, Request $request): Response
+    public function show(Page $page, Request $request, SessionInterface $session): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -73,6 +75,9 @@ class PageController extends AbstractController
             );
             return $this->redirectToRoute('page_index');
         }
+
+        $session->set('page_id', $page->getId());
+
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
@@ -120,7 +125,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'page_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'page_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -166,5 +171,13 @@ class PageController extends AbstractController
         $orderService->refreshOrder($page->getUser()->getPages());
 
         return $this->redirectToRoute('page_index');
+    }
+
+    #[Route('/get-title-page-service', name: 'title_page_service', methods: ['POST'])]
+    public function findTitlePageFormExternalUrl(Request $request, ScraperService $scraper): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            return $this->json($scraper->getTitleFromUrl($request->request->get('url')));
+        }
     }
 }
