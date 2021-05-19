@@ -51,7 +51,7 @@ class PageController extends AbstractController
             $this->getDoctrine()->getManager()->refresh($page->getUser());
             $orderService->refreshOrder($page->getUser()->getPages());
 
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('page/new.html.twig', [
@@ -73,7 +73,7 @@ class PageController extends AbstractController
                 'danger',
                 Constant::FORBIDDEN
             );
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         $session->set('page_id', $page->getId());
@@ -102,7 +102,7 @@ class PageController extends AbstractController
                 'danger',
                 Constant::FORBIDDEN
             );
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         $form = $this->createForm(PageType::class, $page);
@@ -116,7 +116,7 @@ class PageController extends AbstractController
                 Constant::SUCCESS_ACTION
             );
 
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('page/edit.html.twig', [
@@ -134,7 +134,7 @@ class PageController extends AbstractController
                 'danger',
                 Constant::FORBIDDEN
             );
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
@@ -151,7 +151,7 @@ class PageController extends AbstractController
             Constant::SUCCESS_ACTION
         );
 
-        return $this->redirectToRoute('page_index');
+        return $this->redirectToRoute('dashboard');
     }
 
     #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'])]
@@ -170,7 +170,7 @@ class PageController extends AbstractController
         $this->getDoctrine()->getManager()->refresh($page->getUser());
         $orderService->refreshOrder($page->getUser()->getPages());
 
-        return $this->redirectToRoute('page_index');
+        return $this->redirectToRoute('dashboard');
     }
 
     #[Route('/get-title-page-service', name: 'title_page_service', methods: ['POST'])]

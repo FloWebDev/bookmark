@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Page;
+use App\Constant\Constant;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +24,7 @@ class PageType extends AbstractType
                 'attr'        => ['placeholder' => 'Titre'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                     ]),
                     new Length([
                         'max'        => 60,

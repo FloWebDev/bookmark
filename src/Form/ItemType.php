@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Constant\Constant;
 use App\Entity\Item;
 use App\Entity\Listing;
 use App\Repository\ListingRepository;
@@ -36,9 +37,6 @@ class ItemType extends AbstractType
                 'label'       => 'URL',
                 'attr'        => ['placeholder' => 'https://www.google.com/'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
-                    ]),
                     new Regex([
                         'pattern' => "/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/",
                         'match'   => true,
@@ -51,7 +49,7 @@ class ItemType extends AbstractType
                 'attr'        => ['placeholder' => 'Titre'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                     ]),
                     new Length([
                         'max'        => 500,
@@ -83,9 +81,6 @@ class ItemType extends AbstractType
                     $form = $event->getForm();
                     $this->pageId = $event->getForm()->getConfig()->getOption('page_id');
 
-                    // dd($pageId);
-
-
                     // Dans le cas d'un update
                     if (!is_null($item->getId())) {
                         $form->remove('position');
@@ -108,7 +103,7 @@ class ItemType extends AbstractType
                             },
                             'constraints'  => [
                                 new NotBlank([
-                                    'message' => 'Ce champ ne doit pas être vide'
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                                 ])
                             ]
                         ]);

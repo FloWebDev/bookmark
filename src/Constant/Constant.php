@@ -14,6 +14,7 @@ class Constant
 
     const SIGN_IN = 'Connexion';
     const SIGN_OUT = 'Déconnexion';
+    const DASHBOARD = 'Dashboard';
     const DELETE_ACTION = 'Supprimer';
     const SUBMIT_ACTION = 'Valider';
     const CANCEL_ACTION = 'Fermer';
@@ -45,4 +46,5 @@ class Constant
     const LIST_CREATE_LABEL = 'Créer une liste';
     const ITEM_CREATE_LABEL = 'Créer un favori';
     
+    const CONSTRAINT_MESSAGE_NOT_BLANK = 'Ce champ ne doit pas être vide';
 }

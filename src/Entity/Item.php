@@ -23,7 +23,7 @@ class Item
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=2048)
+     * @ORM\Column(type="string", length=2048, nullable=true)
      */
     private $url;
 

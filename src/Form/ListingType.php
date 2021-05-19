@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Page;
 use App\Entity\Listing;
+use App\Constant\Constant;
 use App\Repository\PageRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -34,7 +35,7 @@ class ListingType extends AbstractType
                 'attr'        => ['placeholder' => 'Titre'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Ce champ ne doit pas être vide'
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                     ]),
                     new Length([
                         'max'        => 60,

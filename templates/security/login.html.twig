@@ -8,12 +8,6 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">{{ Constant.SIGN_OUT }}</a>
-        </div>
-    {% endif %}
-
     <h1 class="h3 mb-3 font-weight-normal"><i class="fas fa-user-astronaut"></i> {{ Constant.SIGN_IN }}</h1>
     <label for="inputUsername">Identifiant</label>
     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control mb-3" required autofocus>

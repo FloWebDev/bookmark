@@ -71,7 +71,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Utilisateur non trouvé.');
+            throw new CustomUserMessageAuthenticationException('Identifiant et/ou mot de passe invalide(s).');
         }
 
         return $user;
@@ -96,7 +96,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('page_index'));
+        return new RedirectResponse($this->urlGenerator->generate('dashboard'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
