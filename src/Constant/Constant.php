@@ -12,9 +12,9 @@ class Constant
     const PAGES_LIST_INDEX = 'Liste des pages';
     const BACK_TO_LIST     = 'Retour à la liste';
 
-    const SIGN_IN = 'Connexion';
-    const SIGN_OUT = 'Déconnexion';
-    const DASHBOARD = 'Dashboard';
+    const SIGN_IN       = 'Connexion';
+    const SIGN_OUT      = 'Déconnexion';
+    const DASHBOARD     = 'Dashboard';
     const DELETE_ACTION = 'Supprimer';
     const SUBMIT_ACTION = 'Valider';
     const CANCEL_ACTION = 'Fermer';
@@ -47,4 +47,20 @@ class Constant
     const ITEM_CREATE_LABEL = 'Créer un favori';
     
     const CONSTRAINT_MESSAGE_NOT_BLANK = 'Ce champ ne doit pas être vide';
+
+    // Wallpapers
+    const WALLPAPERS = [
+        'autre-monde.jpg',
+        'chess-landscape.jpg',
+        'mario.jpg',
+        'mountain.jpg',
+        'pacman.jpg',
+        'plage.jpg',
+        'poker-dog.jpg',
+        'shark.jpg',
+        'snow.jpg',
+        'star-wars.jpg',
+        'sun.jpg',
+        't-rex.jpg'
+    ];
 }

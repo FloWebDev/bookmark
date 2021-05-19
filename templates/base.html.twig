@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
         <style>
             body {
-                background-image: url("{{ asset('assets/wallpapers/pacman.jpg') }}");
+                background-image: url("{{ asset('assets/wallpapers/' ~ app.user.wallpaper) }}");
             }
         </style>
     {% endif %}
@@ -60,7 +60,7 @@
     <script src="{{ asset('assets/js/app.js') }}"></script>
     {% if app.request.get('_route') == 'page_show' %}
         <script>
-            const titlePageService = "{{ path('title_page_service')|e('js') }}";
+            const titlePageServicePath = "{{ path('title_page_service')|e('js') }}";
         </script>
         <script src="{{ asset('assets/js/page.js') }}"></script>
     {% endif %}

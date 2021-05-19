@@ -241,7 +241,7 @@ const page = {
             const xhr = new XMLHttpRequest();
             data = new FormData();
             data.set('url', url);
-            xhr.open('POST', titlePageService, true); // titlePageService définie dans base.html.twig
+            xhr.open('POST', titlePageServicePath, true); // titlePageService définie dans base.html.twig
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.responseType = 'json';
             xhr.onreadystatechange = () => {
@@ -251,7 +251,7 @@ const page = {
                             document.querySelector('#item_title').value = xhr.response;
                         }
                     } else {
-                        console.error('Erreur getTitlePageFromExternalUrl')
+                        console.error('Erreur getTitlePageFromExternalUrl');
                     }
                 }
             };

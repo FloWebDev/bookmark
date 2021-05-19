@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/gallery.css') }}">
+{% endblock %}
+
 {% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
 
 {% block body %}
@@ -39,4 +43,24 @@
         {% endfor %}
         </tbody>
     </table>
+    <h2 class="h1 text-light col-12 p-0">Fonds d'écran</h2>
+    <div id="gallery">
+        {% for wallpaper in Constant.WALLPAPERS %}
+        {% set url = asset('assets/wallpapers/' ~ wallpaper) %}
+            <div class="picture {% if app.user.wallpaper == wallpaper %}active{% endif %}" 
+                title="{{ wallpaper }}"
+                alt="{{ wallpaper }}"
+                style="background-image: url('{{ url }}');"
+                data-wallpaper="{{ wallpaper }}">
+            </div>
+            
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    const changeWallpaperPath = "{{ path('wallpaper_change')|e('js') }}";
+</script>
+    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
 {% endblock %}

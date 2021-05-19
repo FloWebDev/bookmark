@@ -53,6 +53,11 @@ class User implements UserInterface
      */
     private $pages;
 
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $wallpaper;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -195,6 +200,18 @@ class User implements UserInterface
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getWallpaper(): ?string
+    {
+        return $this->wallpaper;
+    }
+
+    public function setWallpaper(?string $wallpaper): self
+    {
+        $this->wallpaper = $wallpaper;
 
         return $this;
     }

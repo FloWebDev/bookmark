@@ -27,6 +27,7 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'));
         $admin->setRole('ROLE_ADMIN');
         $admin->setEmail('admin@admin.io');
+        $admin->setWallpaper('pacman.jpg');
         $manager->persist($admin);
 
         // POUR ADMIN
@@ -36,6 +37,7 @@ class AppFixtures extends Fixture
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'user'));
         $user->setRole('ROLE_USER');
         $user->setEmail('user@user.io');
+        $user->setWallpaper('chess-landscape.jpg');
         $manager->persist($user);
 
         // Création des pages
