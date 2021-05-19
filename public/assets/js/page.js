@@ -246,10 +246,9 @@ const page = {
             xhr.responseType = 'json';
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
-                    // https://ourcodeworld.com/articles/read/188/encode-and-decode-html-entities-using-pure-javascript
                     if (xhr.status >= 200 && xhr.status < 300) {
                         if (xhr.response) {
-                            document.querySelector('#item_title').value = xhr.response.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+                            document.querySelector('#item_title').value = xhr.response;
                         }
                     } else {
                         console.error('Erreur getTitlePageFromExternalUrl')

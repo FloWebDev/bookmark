@@ -16,6 +16,7 @@ class ScraperService
     {
         $content  = @file_get_contents($url);
         $title    = preg_match('/<title[^>]*>(.*?)<\/title>/ims', $content, $match) ? $match[1] : null;
-        return $title;
+
+        return html_entity_decode($title, ENT_QUOTES | ENT_XML1, 'UTF-8');
     }
 }
