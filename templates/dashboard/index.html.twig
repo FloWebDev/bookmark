@@ -45,10 +45,10 @@
     </table>
     <h2 class="h1 text-light col-12 p-0">Fonds d'écran</h2>
     <div id="gallery">
-        {% for wallpaper in Constant.WALLPAPERS %}
+        {% for label, wallpaper in Constant.WALLPAPERS %}
         {% set url = asset('assets/wallpapers/' ~ wallpaper) %}
             <div class="picture {% if app.user.wallpaper == wallpaper %}active{% endif %}" 
-                title="{{ wallpaper }}"
+                title="{{ label }}"
                 alt="{{ wallpaper }}"
                 style="background-image: url('{{ url }}');"
                 data-wallpaper="{{ wallpaper }}">

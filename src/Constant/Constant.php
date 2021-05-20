@@ -50,17 +50,21 @@ class Constant
 
     // Wallpapers
     const WALLPAPERS = [
-        'autre-monde.jpg',
-        'chess-landscape.jpg',
-        'mario.jpg',
-        'mountain.jpg',
-        'pacman.jpg',
-        'plage.jpg',
-        'poker-dog.jpg',
-        'shark.jpg',
-        'snow.jpg',
-        'star-wars.jpg',
-        'sun.jpg',
-        't-rex.jpg'
+        'Années 90'         => '90s.jpg',
+        'Autre Monde'       => 'autre-monde.jpg',
+        'Plage'             => 'beach.jpg',
+        'Échecs 1'          => 'chess-garden.jpg',
+        'Échecs 2'          => 'chess-landscape.jpg',
+        'DC Comics'         => 'dc-comics.jpg',
+        'Mario Geek'        => 'mario.jpg',
+        'Marvel'            => 'marvel.jpg',
+        'Lac et Montagne'   => 'mountain.jpg',
+        'Pacman'            => 'pacman.jpg',
+        'Poker'             => 'poker-dog.jpg',
+        'Neige'             => 'snow.jpg',
+        'Star Wars'         => 'star-wars.jpg',
+        'Coucher de soleil' => 'sun.jpg',
+        'Tyrannosaure'      => 't-rex.jpg',
+        'Business'          => 'zzz.jpg'
     ];
 }

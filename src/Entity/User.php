@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Constant\Constant;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -62,6 +63,7 @@ class User implements UserInterface
     {
         $this->created_at = new \DateTime();
         $this->pages      = new ArrayCollection();
+        $this->wallpaper  = Constant::WALLPAPERS['Business'];
     }
 
     public function __toString()
