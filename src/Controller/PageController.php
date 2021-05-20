@@ -51,6 +51,11 @@ class PageController extends AbstractController
             $this->getDoctrine()->getManager()->refresh($page->getUser());
             $orderService->refreshOrder($page->getUser()->getPages());
 
+            $this->addFlash(
+                'success',
+                Constant::SUCCESS_ACTION
+            );
+
             return $this->redirectToRoute('dashboard');
         }
 
@@ -138,7 +143,7 @@ class PageController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
-            $user = $page->getUser();
+            $user          = $page->getUser();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);
             $entityManager->flush();

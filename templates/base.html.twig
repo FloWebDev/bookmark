@@ -37,11 +37,11 @@
                 {{ knp_menu_render('main', {'template' : 'menu/custom_knp_menu.html.twig'}) }}
             </div>
             {% endif %}
-            <div class="row col-12">
+            <div id="flashMessages" class="row col-12">
                 {# read and display all flash messages #}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
-                        <div id="flashMessages" class="alert alert-{{ label }} mx-auto" role="alert">
+                        <div class="alert alert-{{ label }} mx-auto" role="alert">
                             {{ message }}
                         </div>
                     {% endfor %}
