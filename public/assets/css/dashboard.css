@@ -1,0 +1,4 @@
+#dashboardContainer {
+    height: var(--container-default-height);
+    overflow: auto;
+}

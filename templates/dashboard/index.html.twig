@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}{{ assets_version }}">
     <link rel="stylesheet" href="{{ asset('assets/css/gallery.css') }}{{ assets_version }}">
 {% endblock %}
 
 {% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
 
 {% block body %}
+<div class="col-12 m-0 p-0" id="dashboardContainer">
+
     <h1 class="text-light">{{ Constant.PAGES_LIST_INDEX }}</h1>
 
     <table class="table">
@@ -57,6 +60,8 @@
             
         {% endfor %}
     </div>
+    
+</div>
 {% endblock %}
 
 {% block javascripts %}

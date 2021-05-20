@@ -1,5 +1,5 @@
 #listContainer {
-    height: 82vh;
+    height: var(--container-default-height);
     overflow: auto;
 }
 

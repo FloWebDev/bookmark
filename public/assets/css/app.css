@@ -34,4 +34,5 @@ form {
 :root {
     --main-bg-color: #131e27;
     --second-bg-color-spinner: #b0d7f8;
+    --container-default-height: 82vh;
 }
