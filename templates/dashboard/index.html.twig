@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/css/gallery.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/gallery.css') }}{{ assets_version }}">
 {% endblock %}
 
 {% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
@@ -63,5 +63,5 @@
 <script>
     const changeWallpaperPath = "{{ path('wallpaper_change')|e('js') }}";
 </script>
-    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard.js') }}{{ assets_version }}"></script>
 {% endblock %}

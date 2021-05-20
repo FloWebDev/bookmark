@@ -241,7 +241,7 @@ const page = {
             const xhr = new XMLHttpRequest();
             data = new FormData();
             data.set('url', url);
-            xhr.open('POST', titlePageServicePath, true); // titlePageService définie dans base.html.twig
+            xhr.open('POST', titlePageServicePath, true); // titlePageService définie dans page/show.html.twig
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.responseType = 'json';
             xhr.onreadystatechange = () => {

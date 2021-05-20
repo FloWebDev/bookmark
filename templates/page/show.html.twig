@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('assets/css/page.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/page.css') }}{{ assets_version }}">
 {% endblock %}
 {% block title %}{{ page.title }}{% endblock %}
 
@@ -21,4 +21,11 @@
     </section>
 
 
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const titlePageServicePath = "{{ path('title_page_service')|e('js') }}";
+    </script>
+    <script src="{{ asset('assets/js/page.js') }}{{ assets_version }}"></script>
 {% endblock %}

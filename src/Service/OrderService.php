@@ -39,19 +39,14 @@ class OrderService
         }
 
         if ($direction === 'up') {
-            dump('up');
             $entityIndex = array_search($entity, $entities);
             if ($entityIndex !== false && isset($entities[$entityIndex - 1])) {
                 $entities[$entityIndex - 1]->setZ($entity->getZ());
             }
             $entity->setZ($entity->getZ() - 1);
         } else {
-            dump('down');
             $entityIndex = array_search($entity, $entities);
-            dump($entityIndex);
             if ($entityIndex !== false && isset($entities[$entityIndex + 1])) {
-                dump($entities[$entityIndex + 1]);
-                dump($entity->getZ());
                 $entities[$entityIndex + 1]->setZ($entity->getZ());
             }
             $entity->setZ($entity->getZ() + 1);
