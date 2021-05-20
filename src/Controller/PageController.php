@@ -82,7 +82,7 @@ class PageController extends AbstractController
             return $this->json([
                 'success' => true,
                 'msg'     => Constant::DASHBOARD_SENTENCE,
-                'form'    => $this->renderView('_modal/_list_show.html.twig', [
+                'form'    => $this->renderView('_partial/_list_show.html.twig', [
                     'page' => $page
                 ])
             ]);

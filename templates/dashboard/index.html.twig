@@ -7,8 +7,7 @@
 {% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
 
 {% block body %}
-    <h1 class="text-light">{{ Constant.PAGES_LIST_INDEX }} 
-    <a href="{{ path('page_new') }}" type="button" class="btn btn-dark text-info p-0 px-1"><i class="fas fa-plus-square"></i></a></h1>
+    <h1 class="text-light">{{ Constant.PAGES_LIST_INDEX }}</h1>
 
     <table class="table">
         <thead>
@@ -27,7 +26,9 @@
 
                     <a href="{{ path('page_show', {'user_id': page.user.id, 'z': page.z}) }}"><i class="far fa-eye"></i></a>
                     <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-pen"></i></a>
-                    {% include 'page/_delete_modal.html.twig' %} - 
+                    <a href="{{ path('page_new') }}"><i class="fas fa-plus"></i></a>
+                    {% include 'page/_delete_modal.html.twig' %}
+                    {% if loop.length > 1 %} - {% endif %}
                     {% if loop.first == false %}
                     <a href="{{ path('page_order', {id: page.id, direction: 'up'}) }}"><i class="fas fa-arrow-up"></i></a>
                     {% endif %}
@@ -38,7 +39,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">{{ Constant.NO_RECORDS_FOUND }}</td>
+                <td colspan="5"><a class="btn btn-dark bg-dark" href="{{ path('page_new') }}"><i class="fas fa-plus-circle"></i> {{ Constant.PAGE_CREATE_LABEL }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,6 +1,6 @@
 {# https://stackoverflow.com/questions/58220574/override-knp-menu-template #}
 <nav class="navbar navbar-expand-lg col-12 navbar-dark font-weight-bold my-3 mx-0 px-3">
-  <a class="navbar-brand" href="{{ path('dashboard') }}">{{ Constant.DASHBOARD }}</a>
+  {# <a class="navbar-brand" href="{{ path('dashboard') }}" title="{{ Constant.DASHBOARD }}"><i class="fas fa-user-cog"></i></a> #}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -11,12 +11,15 @@
       {% if item.children %}
         {% for child in item.children %}
         <li class="nav-item active">
-          <a class="nav-link" href="{{ child.uri }}">{{ child.name }}</span></a>
+          <a class="nav-link" href="{{ child.uri }}" title="{{ child.name }}">{{ child.name }}</span></a>
         </li>
         {% endfor %}
       {% endif %}
         <li class="nav-item active">
-          <a class="nav-link" href="{{ path('app_logout') }}">{{ Constant.SIGN_OUT }}</span></a>
+          <a class="nav-link" href="{{ path('dashboard') }}" title="{{ Constant.DASHBOARD }}"><i class="fas fa-user-cog"></i></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ path('app_logout') }}" title="{{ Constant.SIGN_OUT }}"><i class="fas fa-sign-out-alt"></i></a>
         </li>
     </ul>
   </div>

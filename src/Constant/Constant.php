@@ -43,6 +43,7 @@ class Constant
     const DROPDOWN_LIST_UPDATE_LABEL = 'Éditer liste';
     const DROPDOWN_LIST_DELETE_LABEL = 'Supprimer liste';
 
+    const PAGE_CREATE_LABEL = 'Créer une page';
     const LIST_CREATE_LABEL = 'Créer une liste';
     const ITEM_CREATE_LABEL = 'Créer un favori';
     
