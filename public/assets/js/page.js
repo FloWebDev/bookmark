@@ -104,7 +104,7 @@ const page = {
         e.preventDefault();
         const xhr = new XMLHttpRequest();
         const data = new FormData(e.target);
-        xhr.open('POST', e.target.getAttribute('action'), true);
+        xhr.open('POST', e.currentTarget.getAttribute('action'), true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.responseType = 'json';
         xhr.onreadystatechange = () => {
