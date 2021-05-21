@@ -1,5 +1,9 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'font-size: 1rem;'}}) }}
     {{ include('item/_delete_form.html.twig') }}
     {{ form_widget(form) }}
-    <input type="submit" class="btn btn-dark" value="{{ Constant.SUBMIT_ACTION }}">
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ Constant.CANCEL_ACTION }}</button>
+        <input type="submit" class="btn btn-dark" value="{{ Constant.SUBMIT_ACTION }}">
+    </div>
+    
 {{ form_end(form) }}
