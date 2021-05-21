@@ -98,12 +98,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
+        $this->security->getUser()->setConnectedAt(new \DateTime());
+        $this->entityManager->flush();
+
+        // Redirection dépend de la présence ou non d'une première page
         if (count($this->security->getUser()->getPages()) > 0) {
             return new RedirectResponse($this->urlGenerator->generate('page_show', [
                 'user_id' => $this->security->getUser()->getId(),
                 'z'       => 1 // page classée en 1ère position
             ]));
         }
+
+        // Si pas de page
         return new RedirectResponse($this->urlGenerator->generate('dashboard'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }

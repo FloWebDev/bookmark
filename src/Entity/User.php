@@ -49,15 +49,20 @@ class User implements UserInterface
     private $created_at;
 
     /**
-     * @ORM\OneToMany(targetEntity=Page::class, mappedBy="user", orphanRemoval=true)
-     * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $pages;
+    private $connected_at;
 
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $wallpaper;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Page::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OrderBy({"z" = "ASC", "created_at" = "ASC"})
+     */
+    private $pages;
 
     public function __construct()
     {
@@ -164,6 +169,42 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getConnectedAt(): ?\DateTimeInterface
+    {
+        return $this->connected_at;
+    }
+
+    public function setConnectedAt(?\DateTimeInterface $connected_at): self
+    {
+        $this->connected_at = $connected_at;
+
+        return $this;
+    }
+
+    public function getWallpaper(): ?string
+    {
+        return $this->wallpaper;
+    }
+
+    public function setWallpaper(?string $wallpaper): self
+    {
+        $this->wallpaper = $wallpaper;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Page[]
      */
@@ -190,30 +231,6 @@ class User implements UserInterface
                 $page->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getWallpaper(): ?string
-    {
-        return $this->wallpaper;
-    }
-
-    public function setWallpaper(?string $wallpaper): self
-    {
-        $this->wallpaper = $wallpaper;
 
         return $this;
     }
