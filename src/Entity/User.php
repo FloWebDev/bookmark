@@ -9,13 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`app_user`")
- * @UniqueEntity(fields = {"username"}, message="Identifiant déjà associé à un autre utilisateur")
- * @UniqueEntity(fields = {"email"}, message="Email déjà associé à un autre utilisateur")
  */
 class User implements UserInterface, EquatableInterface
 {

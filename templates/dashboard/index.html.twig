@@ -13,7 +13,7 @@
     <h1 class="text-light col-12 p-0">{{ Constant.ACCOUNT_SETTINGS }}</h1>
 
     <p class="mx-0 my-4 p-0">
-        <a class="btn btn-dark bg-dark" href="{{ path('user_edit', {id: app.user.id}) }}"><i class="fas fa-plus-circle"></i> {{ Constant.USER_UPDATE_LABEL_BIS }}</a>
+        <a class="btn btn-dark bg-dark" href="{{ path('user_edit', {id: app.user.id}) }}"><i class="fas fa-user"></i> {{ Constant.USER_UPDATE_LABEL_BIS }}</a>
         {% if app.user.role == 'ROLE_ADMIN' %}
             <a class="btn btn-dark bg-dark" href="{{ path('user_index') }}"><i class="fas fa-users"></i> {{ Constant.USER_INDEX_LABEL_BIS }}</a>
         {% endif %}

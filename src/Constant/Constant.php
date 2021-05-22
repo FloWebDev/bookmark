@@ -40,7 +40,7 @@ class Constant
     const ITEM_DELETE_MODAL_ALERT = 'Confirmez la suppression de l\'item.';
     const USER_NEW_LABEL          = 'Inscription';
     const USER_UPDATE_LABEL       = 'Modification profil';
-    const USER_UPDATE_LABEL_BIS   = 'Modifier profil';
+    const USER_UPDATE_LABEL_BIS   = 'Compte';
     const USER_INDEX_LABEL        = 'Liste des utilisateurs';
     const USER_INDEX_LABEL_BIS    = 'Lister utilisateurs';
     const USER_DELETE_CONFIRMATION    = 'Confirmez la suppression de l\'utilisateur';

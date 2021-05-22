@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Constant\Constant;
+use App\Validator\UniqueCaseInsensitive;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -41,6 +42,10 @@ class UserType extends AbstractType
                     new Length([
                         'max'        => 60,
                         'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                    ]),
+                    new UniqueCaseInsensitive([
+                        'field'        => 'username',
+                        'currentValue' => $builder->getData()->getUsername()
                     ])
                 ]
             ])
@@ -57,6 +62,10 @@ class UserType extends AbstractType
                     new Email([
                         'mode'    => 'loose',
                         'message' => 'L\'adresse email saisie n\'est pas valide'
+                    ]),
+                    new UniqueCaseInsensitive([
+                        'field'        => 'email',
+                        'currentValue' => $builder->getData()->getEmail()
                     ])
                 ]
             ])->addEventListener(
