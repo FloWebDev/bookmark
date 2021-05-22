@@ -23,6 +23,10 @@ class UniqueCaseInsensitiveValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, UniqueCaseInsensitive::class);
         }
 
+        if (empty($constraint->field) || empty($constraint->currentValue)) {
+            throw new \Exception('$constraint->field et/ou constraint->currentValue non renseignée(s)');
+        }
+
         // custom constraints should ignore null and empty values to allow
         // other constraints (NotBlank, NotNull, etc.) to take care of that
         if (null === $value || '' === $value) {
