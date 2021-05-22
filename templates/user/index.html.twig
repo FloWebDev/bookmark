@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ Constant.USER_INDEX_LABEL }}{% endblock %}
+
+{% block body %}
+    <h1 class="text-light">{{ Constant.USER_INDEX_LABEL }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Identifiant</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Créé le</th>
+                <th>Connecté le</th>
+                <th>Stats</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }} @ {{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role == 'ROLE_ADMIN' ? 'Administrateur' : 'Utilisateur' }}</td>
+                <td>{{ user.createdAt ? user.createdAt|date('d/m/Y à H:i:s') : '' }}</td>
+                <td>{{ user.connectedAt ? user.connectedAt|date('d/m/Y à H:i:s') : '' }}</td>
+                <td>
+                    Pages : {{ user.pages|length }}
+                </td>
+                <td>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}"><i class="fas fa-pen"></i></a>
+                    <a href="{{ path('user_delete', {'id': user.id}) }}?_token={{ csrf_token('delete' ~ user.id) }}" 
+                    class="userDeleteBtn">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">{{ Constant.NO_RECORDS_FOUND }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="col-12 text-center">
+        <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK }}</a>
+    </p>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/userDelete.js') }}{{ assets_version }}"></script>
+{% endblock %}

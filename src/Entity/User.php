@@ -3,17 +3,21 @@
 namespace App\Entity;
 
 use App\Constant\Constant;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`app_user`")
+ * @UniqueEntity(fields = {"username"}, message="Identifiant déjà associé à un autre utilisateur")
+ * @UniqueEntity(fields = {"email"}, message="Email déjà associé à un autre utilisateur")
  */
-class User implements UserInterface
+class User implements UserInterface, EquatableInterface
 {
     /**
      * @ORM\Id
@@ -118,9 +122,11 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
-        $this->password = $password;
+        if (!is_null($password)) {
+            $this->password = $password;
+        }
 
         return $this;
     }
@@ -150,7 +156,7 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -233,5 +239,26 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * La méthode sera appelée lors de la comparaison des utilisateurs afin de vérifier s'il nécessaire de forcer
+     * l'utilisateur à se reconnecter.
+     * L'implémentation de cette méthode permet d'éviter les déconnexions intempestives (voir exemples cités ci-dessous).
+     *
+     * @link https://stackoverflow.com/questions/63924686/symfony5-update-user-profile-cause-logout-when-edit-form-submitted
+     * @link https://github.com/symfony/symfony/issues/33418
+     */
+    public function isEqualTo(UserInterface $user): bool
+    {
+        if (!$user instanceof self) {
+            return false;
+        }
+
+        if ($this->getId() !== $user->getId()) {
+            return false;
+        }
+
+        return true;
     }
 }

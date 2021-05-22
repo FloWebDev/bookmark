@@ -40,7 +40,7 @@ class ItemType extends AbstractType
                     new Regex([
                         'pattern' => "/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/",
                         'match'   => true,
-                        'message' => 'L\'URL renseignée n\'est pas valide'
+                        'message' => Constant::CONSTRAINT_MESSAGE_URL_FORMAT
                     ])
                 ]
             ])
@@ -53,7 +53,7 @@ class ItemType extends AbstractType
                     ]),
                     new Length([
                         'max'        => 500,
-                        'maxMessage' => 'Nombre de caractères maximum attendus : {{ limit }}'
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                     ])
                 ]
             ])
@@ -71,7 +71,7 @@ class ItemType extends AbstractType
                 'constraints' => [
                     new Length([
                         'max'        => 5000,
-                        'maxMessage' => 'Nombre de caractères maximum autorisés : {{ limit }}'
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                     ])
                 ]
             ])->addEventListener(

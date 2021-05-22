@@ -1,0 +1,7 @@
+<div class="col-12">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'col-sm-6 mx-auto'}}) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-dark" type="submit" value="{{ Constant.SUBMIT_ACTION }}">
+        <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
+    {{ form_end(form) }}
+</div>

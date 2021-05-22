@@ -28,7 +28,7 @@ class PageType extends AbstractType
                     ]),
                     new Length([
                         'max'        => 60,
-                        'maxMessage' => 'Nombre de caractères maximum attendus : {{ limit }}'
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                     ])
                 ]
             ])

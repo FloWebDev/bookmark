@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ Constant.USER_UPDATE_LABEL }}{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-light text-center">{{ Constant.USER_UPDATE_LABEL }}</h1>
+
+    {{ include('user/_form.html.twig') }}
+{% endblock %}
