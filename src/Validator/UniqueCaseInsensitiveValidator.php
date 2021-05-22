@@ -4,7 +4,6 @@ namespace App\Validator;
 use App\Repository\UserRepository;
 use App\Validator\UniqueCaseInsensitive;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
