@@ -30,5 +30,11 @@
     #}
 
     <input class="btn btn-lg btn-dark mx-auto" type="submit" value="{{ Constant.SIGN_IN }}">
+
+    <div class="mt-2 mb-0 text-center">
+        <small>
+            <a href="{{ path('user_new') }}">{{ Constant.SIGN_UP }}</a> - <a href="{{ path('forgot_password') }}">{{ Constant.FORGOT_PASSWORD }}</a>
+        </small>
+    </div>
 </form>
 {% endblock %}

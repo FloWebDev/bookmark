@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-#[Route('/user')]
 class UserController extends AbstractController
 {
-    #[Route('s', name: 'user_index', methods: ['GET'])]
+    #[Route('users', name: 'user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -24,7 +24,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
+    #[Route('sign-up', name: 'user_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
@@ -37,6 +37,11 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                Constant::SUCCESS_ACTION
+            );
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -46,7 +51,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
+    #[Route('user/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -68,6 +73,11 @@ class UserController extends AbstractController
             }
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash(
+                'success',
+                Constant::SUCCESS_ACTION
+            );
+
             return $this->redirectToRoute('dashboard');
         }
 
@@ -77,7 +87,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'user_delete', methods: ['GET'])]
+    #[Route('user/delete/{id}', name: 'user_delete', methods: ['GET'])]
     public function delete(Request $request, User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -101,6 +111,41 @@ class UserController extends AbstractController
             'success',
             Constant::SUCCESS_ACTION
         );
+
+        return $this->redirectToRoute('dashboard');
+    }
+
+    #[Route('/forgot-password', name: 'forgot_password', methods: ['GET', 'POST'])]
+    public function forgotPassword(Request $request, UserRepository $userRepository): Response
+    {
+        $this->denyAccessUnlessGranted('IS_ANONYMOUS');
+
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user, [
+            'context' => 'forgot_password'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userTarget = $userRepository->findOneBy([
+                'username' => $user->getUsername(),
+                'email'    => $user->getEmail()
+            ]);
+
+            if (is_null($userTarget)) {
+                $form->addError(new FormError(Constant::ERROR_NO_MATCHING_USER));
+                return $this->render('user/forgot_password.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            dd('TODO SEND MAIL');
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('user/forgot_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
 
         return $this->redirectToRoute('dashboard');
     }

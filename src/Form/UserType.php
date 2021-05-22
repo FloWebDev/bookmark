@@ -23,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 class UserType extends AbstractType
 {
     private $security;
+    private $options;
 
     public function __construct(Security $security)
     {
@@ -31,10 +32,11 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->options = $options;
         $builder
             ->add('username', TextType::class, [
-                'label'       => 'Login (identifiant de connexion) (*)',
-                'attr'        => ['placeholder' => 'Titre'],
+                'label'       => 'Identifiant (*)',
+                'attr'        => ['placeholder' => 'Identifiant'],
                 'constraints' => [
                     new NotBlank([
                         'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
@@ -57,11 +59,11 @@ class UserType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Adresse email obligatoire'
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                     ]),
                     new Email([
                         'mode'    => 'loose',
-                        'message' => 'L\'adresse email saisie n\'est pas valide'
+                        'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
                     ]),
                     new UniqueCaseInsensitive([
                         'field'        => 'email',
@@ -75,7 +77,7 @@ class UserType extends AbstractType
                     $form = $event->getForm();
 
                     // Dans le cas d'un create
-                    if (is_null($user->getId())) {
+                    if (is_null($user->getId()) && empty($this->options['context'])) {
                         $form->add('password', RepeatedType::class, [
                             'type'            => PasswordType::class,
                             'invalid_message' => Constant::CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD,
@@ -92,6 +94,37 @@ class UserType extends AbstractType
                                     'max'        => 64,
                                     'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                                     'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ])
+                            ]
+                        ]);
+                    } elseif (is_null($user->getId()) && $this->options['context'] === 'forgot_password') {
+                        $form->remove('username')->remove('email')
+                        ->add('username', TextType::class, [
+                            'label'       => 'Identifiant (*)',
+                            'attr'        => ['placeholder' => 'Identifiant'],
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                                ]),
+                                new Length([
+                                    'max'        => 60,
+                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ])
+                            ]
+                        ])
+                        ->add('email', EmailType::class, [
+                            'label' => 'Email (*)',
+                            'help'  => Constant::HELP_FORGOT_PASSWORD_MESSAGE,
+                            'attr'  => [
+                                'placeholder' => 'exemple@gmail.com'
+                            ],
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                                ]),
+                                new Email([
+                                    'mode'    => 'loose',
+                                    'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
                                 ])
                             ]
                         ]);
@@ -136,6 +169,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'context'    => null
         ]);
     }
 }

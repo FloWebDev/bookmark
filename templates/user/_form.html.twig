@@ -2,7 +2,11 @@
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'col-sm-6 mx-auto'}}) }}
         {{ form_widget(form) }}
         <div class="modal-footer">
-            <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
+            {% if app.user %}
+                <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
+            {% else %}
+                <a class="btn btn-dark" href="{{ path('app_login') }}">{{ Constant.BACK }}</a>
+            {% endif %}
             <input class="btn btn-dark" type="submit" value="{{ Constant.SUBMIT_ACTION }}">
         </div>
     {{ form_end(form) }}

@@ -10,18 +10,21 @@ class Constant
     const NOT_FOUND        = 'Ressource introuvable'; // 404
     const NO_RECORDS_FOUND = 'Aucun élément trouvé.';
 
-    const HELP_EMAIL_MESSAGE = 'L\'adresse email ne sera ni revendue ni communiquée à un tiers.';
+    const HELP_EMAIL_MESSAGE           = 'L\'adresse email ne sera ni revendue ni communiquée à un tiers.';
+    const HELP_FORGOT_PASSWORD_MESSAGE = 'Un nouveau mot de passe vous sera envoyé à cette adresse.';
 
     const PAGES_LIST_INDEX = 'Liste des pages';
     const BACK_TO_LIST     = 'Retour à la liste';
     const BACK             = 'Retour';
 
-    const SIGN_IN       = 'Connexion';
-    const SIGN_OUT      = 'Déconnexion';
-    const DASHBOARD     = 'Dashboard';
-    const DELETE_ACTION = 'Supprimer';
-    const SUBMIT_ACTION = 'Valider';
-    const CANCEL_ACTION = 'Fermer';
+    const SIGN_IN         = 'Connexion';
+    const SIGN_OUT        = 'Déconnexion';
+    const SIGN_UP         = 'Inscription';
+    const FORGOT_PASSWORD = 'Mot de passe oublié';
+    const DASHBOARD       = 'Dashboard';
+    const DELETE_ACTION   = 'Supprimer';
+    const SUBMIT_ACTION   = 'Valider';
+    const CANCEL_ACTION   = 'Fermer';
      
     const DASHBOARD_SENTENCE      = 'Tout le contenu de votre page !';
     const SUCCESS_ACTION          = 'Action réalisée avec succès';
@@ -32,17 +35,17 @@ class Constant
 
     const ITEM_CREATE_FORM_TITLE = 'Ajout d\'un favori';
 
-    const PAGE_DELETE_MODAL_TITLE = 'Suppression de la page : ';
-    const PAGE_DELETE_MODAL_ALERT = '<b>Attention : </b><br>La suppression d\'une page entraîne la suppression de toutes les listes et de tous les items associés.';
-    const LIST_DELETE_MODAL_TITLE = 'Suppression de la liste : ';
-    const ITEM_DELETE_MODAL_TITLE = 'Suppression item : ';
-    const LIST_DELETE_MODAL_ALERT = '<b>Attention : </b><br>La suppression d\'une liste entraîne la suppression de tous les items associés.';
-    const ITEM_DELETE_MODAL_ALERT = 'Confirmez la suppression de l\'item.';
-    const USER_NEW_LABEL          = 'Inscription';
-    const USER_UPDATE_LABEL       = 'Modification profil';
-    const USER_UPDATE_LABEL_BIS   = 'Compte';
-    const USER_INDEX_LABEL        = 'Liste des utilisateurs';
-    const USER_INDEX_LABEL_BIS    = 'Lister utilisateurs';
+    const PAGE_DELETE_MODAL_TITLE     = 'Suppression de la page : ';
+    const PAGE_DELETE_MODAL_ALERT     = '<b>Attention : </b><br>La suppression d\'une page entraîne la suppression de toutes les listes et de tous les items associés.';
+    const LIST_DELETE_MODAL_TITLE     = 'Suppression de la liste : ';
+    const ITEM_DELETE_MODAL_TITLE     = 'Suppression item : ';
+    const LIST_DELETE_MODAL_ALERT     = '<b>Attention : </b><br>La suppression d\'une liste entraîne la suppression de tous les items associés.';
+    const ITEM_DELETE_MODAL_ALERT     = 'Confirmez la suppression de l\'item.';
+    const USER_NEW_LABEL              = 'Inscription';
+    const USER_UPDATE_LABEL           = 'Modification profil';
+    const USER_UPDATE_LABEL_BIS       = 'Compte';
+    const USER_INDEX_LABEL            = 'Liste des utilisateurs';
+    const USER_INDEX_LABEL_BIS        = 'Liste utilisateurs';
     const USER_DELETE_CONFIRMATION    = 'Confirmez la suppression de l\'utilisateur';
 
     const PAGE_CREATE_TITLE = 'Création Page';
@@ -59,10 +62,13 @@ class Constant
     const ITEM_CREATE_LABEL = 'Créer un favori';
     
     const CONSTRAINT_MESSAGE_NOT_BLANK             = 'Ce champ ne doit pas être vide';
+    const CONSTRAINT_MESSAGE_INVALID_EMAIL         = 'L\'adresse email saisie n\'est pas valide';
     const CONSTRAINT_MESSAGE_URL_FORMAT            = 'L\'URL renseignée n\'est pas valide';
     const CONSTRAINT_MESSAGE_MIN_LENGTH            = 'Nombre de caractères minimum attendu : ';
     const CONSTRAINT_MESSAGE_MAX_LENGTH            = 'Nombre de caractères maximum attendu : ';
     const CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD = 'Les champs du mot de passe doivent correspondre';
+
+    const ERROR_NO_MATCHING_USER = 'Aucun utilisateur correspondant.';
 
     // Wallpapers
     const WALLPAPERS_TITLE = 'Fonds d\'écran';
