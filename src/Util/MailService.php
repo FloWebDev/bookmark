@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Util;
 
 use App\Constant\Constant;
 use Symfony\Component\Mime\Email;

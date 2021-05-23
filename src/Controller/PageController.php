@@ -5,8 +5,7 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Form\PageType;
 use App\Constant\Constant;
-use App\Service\OrderService;
-use App\Service\ScraperService;
+use App\Util\OrderService;
 use App\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -176,13 +175,5 @@ class PageController extends AbstractController
         $orderService->refreshOrder($page->getUser()->getPages());
 
         return $this->redirectToRoute('dashboard');
-    }
-
-    #[Route('/get-title-page-service', name: 'title_page_service', methods: ['POST'])]
-    public function findTitlePageFormExternalUrl(Request $request, ScraperService $scraper): Response
-    {
-        if ($request->isXmlHttpRequest()) {
-            return $this->json($scraper->getTitleFromUrl($request->request->get('url')));
-        }
     }
 }

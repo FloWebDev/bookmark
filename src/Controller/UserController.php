@@ -7,7 +7,7 @@ use App\Form\UserType;
 use App\Constant\Constant;
 
 use App\Repository\UserRepository;
-use App\Service\MailService;
+use App\Util\MailService;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

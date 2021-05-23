@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Listing;
 use App\Form\ListingType;
 use App\Constant\Constant;
-use App\Service\OrderService;
+use App\Util\OrderService;
 use App\Repository\ListingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

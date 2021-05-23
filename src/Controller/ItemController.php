@@ -5,7 +5,8 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Form\ItemType;
 use App\Constant\Constant;
-use App\Service\OrderService;
+use App\Util\OrderService;
+use App\Util\ScraperService;
 use App\Repository\ItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -183,6 +184,14 @@ class ItemController extends AbstractController
             return $this->json([
                 'success'   => true
             ]);
+        }
+    }
+
+    #[Route('/get-title-page-service', name: 'title_page_service', methods: ['POST'])]
+    public function findTitlePageFormExternalUrl(Request $request, ScraperService $scraper): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            return $this->json($scraper->getTitleFromUrl($request->request->get('url')));
         }
     }
 }

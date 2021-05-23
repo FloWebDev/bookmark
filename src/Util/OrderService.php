@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace App\Util;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class OrderService
 {
