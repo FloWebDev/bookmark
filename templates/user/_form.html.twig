@@ -3,9 +3,9 @@
         {{ form_widget(form) }}
         <div class="modal-footer">
             {% if app.user %}
-                <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
+                <a class="btn btn-secondary" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
             {% else %}
-                <a class="btn btn-dark" href="{{ path('app_login') }}">{{ Constant.BACK }}</a>
+                <a class="btn btn-secondary" href="{{ path('app_login') }}">{{ Constant.BACK }}</a>
             {% endif %}
             <input class="btn btn-dark" type="submit" value="{{ Constant.SUBMIT_ACTION }}">
         </div>

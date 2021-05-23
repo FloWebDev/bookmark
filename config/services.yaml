@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.webmaster_email: '%env(WEBMASTER_EMAIL)%'
 
 services:
     # default configuration for services in *this* file
@@ -39,3 +40,7 @@ services:
         arguments: ["@knp_menu.factory"]
         tags:
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } # The alias is what is used to retrieve the menu
+
+    App\Service\MailService:
+        arguments: 
+            $from: "%app.webmaster_email%"

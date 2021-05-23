@@ -90,7 +90,7 @@ class UserType extends AbstractType
                                     'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                                 ]),
                                 new Length([
-                                    'min'        => 8,
+                                    'min'        => 5,
                                     'max'        => 64,
                                     'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                                     'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'

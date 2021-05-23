@@ -70,6 +70,9 @@ class Constant
 
     const ERROR_NO_MATCHING_USER = 'Aucun utilisateur correspondant.';
 
+    const EMAIL_SEND_SUCCESS = 'Email envoyé avec succès';
+    const EMAIL_SEND_ERROR = 'Erreur dans l\'envoi de l\'email.';
+
     // Wallpapers
     const WALLPAPERS_TITLE = 'Fonds d\'écran';
     const WALLPAPERS       = [
@@ -90,4 +93,9 @@ class Constant
         'Tyrannosaure'      => 't-rex.jpg',
         'Business'          => 'zzz.jpg'
     ];
+
+    // FORGOT PASSWORD
+    const EMAIL_FORGOT_PASSWORD_SUBJECT = 'Nouveau mot de passe (provisoire)';
+    const EMAIL_FORGOT_PASSWORD_TEXT = 'Bonjour, / Suite à votre demande, voici votre nouveau mot de passe : [NEW_PASSWORD] Important : modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion. / À bientôt.';
+    const EMAIL_FORGOT_PASSWORD_HTML = '<p>Bonjour,<br><br>Suite à votre demande, voici votre nouveau mot de passe : <b>[NEW_PASSWORD]</b><br><b>Important :</b> modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion.<br><br>À bientôt.</p>';
 }

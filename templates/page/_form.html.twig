@@ -2,7 +2,7 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'col-sm-6 mx-auto'}}) }}
     {{ form_widget(form) }}
     <div class="modal-footer">
-        <a class="btn btn-dark" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
+        <a class="btn btn-secondary" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>
         <input class="btn btn-dark" type="submit" value="{{ Constant.SUBMIT_ACTION }}">
     </div>
 {{ form_end(form) }}

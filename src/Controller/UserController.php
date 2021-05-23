@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Constant\Constant;
+
 use App\Repository\UserRepository;
+use App\Service\MailService;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
@@ -25,7 +27,7 @@ class UserController extends AbstractController
     }
 
     #[Route('sign-up', name: 'user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
         $user = new User();
@@ -33,6 +35,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRole('ROLE_USER');
+            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -116,7 +120,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/forgot-password', name: 'forgot_password', methods: ['GET', 'POST'])]
-    public function forgotPassword(Request $request, UserRepository $userRepository): Response
+    public function forgotPassword(Request $request, UserRepository $userRepository, MailService $emailService, UserPasswordEncoderInterface $encoder): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
 
@@ -139,7 +143,17 @@ class UserController extends AbstractController
                 ]);
             }
 
-            dd('TODO SEND MAIL');
+            $newPassword = uniqid();
+            $userTarget->setPassword($encoder->encodePassword($userTarget, $newPassword));
+            $this->getDoctrine()->getManager()->flush();
+
+            (array) $res = $emailService->sendEmail($userTarget->getEmail(), Constant::EMAIL_FORGOT_PASSWORD_SUBJECT, str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_TEXT), str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_HTML));
+
+            $this->addFlash(
+                $res['success'] ? 'success' : 'danger',
+                $res['message']
+            );
+
             return $this->redirectToRoute('app_login');
         }
 
