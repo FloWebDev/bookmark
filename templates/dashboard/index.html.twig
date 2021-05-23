@@ -12,12 +12,27 @@
 
     <h1 class="text-light col-12 p-0">{{ Constant.ACCOUNT_SETTINGS }}</h1>
 
-    <p class="mx-0 my-4 p-0">
-        <a class="btn btn-dark bg-dark" href="{{ path('user_edit', {id: app.user.id}) }}"><i class="fas fa-user"></i> {{ Constant.USER_UPDATE_LABEL_BIS }}</a>
-        {% if app.user.role == 'ROLE_ADMIN' %}
-            <a class="btn btn-dark bg-dark" href="{{ path('user_index') }}"><i class="fas fa-users"></i> {{ Constant.USER_INDEX_LABEL_BIS }}</a>
-        {% endif %}
-    </p>
+    <div class="mx-0 my-2 p-0 text-dark bg-light">
+        <div class="row col-12">
+            <div class="col-1 d-flex justify-content-center align-items-center">
+                <img src="{{ asset('assets/img/profil.png') }}{{ assets_version }}" alt="profil utilisateur" title="Profil utilisateur" width="100" height="100">
+            </div>
+            <div class="col-11">
+                <div class="card-body">
+                    <h5 class="card-title">Profil</h5>
+                    <p class="card-text">
+                        Utilisateur : {{ app.user.username }}<br>
+                        Type de compte : {% if app.user.role == 'ROLE_ADMIN' %}Administrateur{% else %}Utilisateur{% endif %}<br>
+                        Compte créé le <i class="font-italic">{{ app.user.createdAt ? app.user.createdAt|date('d/m/Y à H:i:s') : '' }}</i>
+                    </p>
+                    <a class="btn btn-dark bg-dark" href="{{ path('user_edit', {id: app.user.id}) }}"><i class="fas fa-user"></i> {{ Constant.USER_UPDATE_LABEL_BIS }}</a>
+                    {% if app.user.role == 'ROLE_ADMIN' %}
+                    <a class="btn btn-dark bg-dark" href="{{ path('user_index') }}"><i class="fas fa-users"></i> {{ Constant.USER_INDEX_LABEL_BIS }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h2 class="text-light">{{ Constant.PAGES_LIST_INDEX }}</h2>
 

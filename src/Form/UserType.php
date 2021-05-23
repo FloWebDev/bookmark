@@ -3,10 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Util\Captcha;
 use App\Constant\Constant;
-use App\Validator\UniqueCaseInsensitive;
+use App\Validator\CaptchaConstraint;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use App\Validator\UniqueCaseInsensitive;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -76,8 +79,8 @@ class UserType extends AbstractType
                     $user = $event->getData();
                     $form = $event->getForm();
 
-                    // Dans le cas d'un create
                     if (is_null($user->getId()) && empty($this->options['context'])) {
+                        // Dans le cas d'un create
                         $form->add('password', RepeatedType::class, [
                             'type'            => PasswordType::class,
                             'invalid_message' => Constant::CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD,
@@ -96,8 +99,24 @@ class UserType extends AbstractType
                                     'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                                 ])
                             ]
+                        ])->add('captcha', IntegerType::class, [
+                            'label'       => Constant::CAPTCHA_LABEL,
+                            'mapped'      => false,
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                                ]),
+                                new Length([
+                                    'min'        => 4,
+                                    'max'        => 4,
+                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ]),
+                                new CaptchaConstraint()
+                            ]
                         ]);
                     } elseif (is_null($user->getId()) && $this->options['context'] === 'forgot_password') {
+                        // Dans le cas d'un mot de passe oublié
                         $form->remove('username')->remove('email')
                         ->add('username', TextType::class, [
                             'label'       => 'Identifiant (*)',
@@ -126,6 +145,21 @@ class UserType extends AbstractType
                                     'mode'    => 'loose',
                                     'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
                                 ])
+                            ]
+                        ])->add('captcha', IntegerType::class, [
+                            'label'       => Constant::CAPTCHA_LABEL,
+                            'mapped'      => false,
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                                ]),
+                                new Length([
+                                    'min'        => 4,
+                                    'max'        => 4,
+                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ]),
+                                new CaptchaConstraint()
                             ]
                         ]);
                     } else {

@@ -1,6 +1,26 @@
 <div class="col-12">
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'col-sm-6 mx-auto'}}) }}
-        {{ form_widget(form) }}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(form) }}
+        </div>
+        {# {{ form_widget(form) }} #}
+        {{ form_row(form.username) }}
+        {{ form_row(form.email) }}
+
+        {% if app.request.get('_route') != 'forgot_password' %}
+            {{ form_row(form.password) }}
+        {% endif %}
+
+        {% if app.user and app.user.role == 'ROLE_ADMIN' and app.user.id != user.id %}
+            {{ form_row(form.role) }}
+        {% endif %}
+
+        {# Gestion affichage du captcha #}
+        {% if captcha is defined %}
+            <p><img src="{{ 'data:image/jpeg;base64,' ~ captcha }}" class="img-fluid" alt="captcha" title="captcha"></p>
+            {{ form_row(form.captcha) }}
+        {% endif %}
+
         <div class="modal-footer">
             {% if app.user %}
                 <a class="btn btn-secondary" href="{{ path('dashboard') }}">{{ Constant.BACK_TO_LIST }}</a>

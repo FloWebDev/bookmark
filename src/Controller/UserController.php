@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Constant\Constant;
-
-use App\Repository\UserRepository;
 use App\Util\MailService;
+
+use App\Constant\Constant;
+use App\Util\CaptchaService;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class UserController extends AbstractController
     }
 
     #[Route('sign-up', name: 'user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, CaptchaService $captchaService): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
         $user = new User();
@@ -51,6 +52,7 @@ class UserController extends AbstractController
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
+            'captcha' => $captchaService->createCaptcha(),
             'form' => $form->createView(),
         ]);
     }
@@ -120,7 +122,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/forgot-password', name: 'forgot_password', methods: ['GET', 'POST'])]
-    public function forgotPassword(Request $request, UserRepository $userRepository, MailService $emailService, UserPasswordEncoderInterface $encoder): Response
+    public function forgotPassword(Request $request, UserRepository $userRepository, MailService $emailService, UserPasswordEncoderInterface $encoder, CaptchaService $captchaService): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
 
@@ -139,7 +141,8 @@ class UserController extends AbstractController
             if (is_null($userTarget)) {
                 $form->addError(new FormError(Constant::ERROR_NO_MATCHING_USER));
                 return $this->render('user/forgot_password.html.twig', [
-                    'form' => $form->createView(),
+                    'captcha' => $captchaService->createCaptcha(),
+                    'form'    => $form->createView()
                 ]);
             }
 
@@ -158,7 +161,8 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/forgot_password.html.twig', [
-            'form' => $form->createView(),
+            'captcha' => $captchaService->createCaptcha(),
+            'form'    => $form->createView()
         ]);
 
         return $this->redirectToRoute('dashboard');

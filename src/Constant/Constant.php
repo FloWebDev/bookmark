@@ -43,7 +43,7 @@ class Constant
     const ITEM_DELETE_MODAL_ALERT     = 'Confirmez la suppression de l\'item.';
     const USER_NEW_LABEL              = 'Inscription';
     const USER_UPDATE_LABEL           = 'Modification profil';
-    const USER_UPDATE_LABEL_BIS       = 'Compte';
+    const USER_UPDATE_LABEL_BIS       = 'Options';
     const USER_INDEX_LABEL            = 'Liste des utilisateurs';
     const USER_INDEX_LABEL_BIS        = 'Liste utilisateurs';
     const USER_DELETE_CONFIRMATION    = 'Confirmez la suppression de l\'utilisateur';
@@ -67,6 +67,7 @@ class Constant
     const CONSTRAINT_MESSAGE_MIN_LENGTH            = 'Nombre de caractères minimum attendu : ';
     const CONSTRAINT_MESSAGE_MAX_LENGTH            = 'Nombre de caractères maximum attendu : ';
     const CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD = 'Les champs du mot de passe doivent correspondre';
+    const CAPTCHA_LABEL = 'Renseignez les chiffres présents dans l\'image (*)';
 
     const ERROR_NO_MATCHING_USER = 'Aucun utilisateur correspondant.';
 
