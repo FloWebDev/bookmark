@@ -79,22 +79,26 @@ class Constant
     // Wallpapers
     const WALLPAPERS_TITLE = 'Fonds d\'écran';
     const WALLPAPERS       = [
-        'Années 90'         => '90s.jpg',
-        'Autre Monde'       => 'autre-monde.jpg',
-        'Plage'             => 'beach.jpg',
-        'Échecs 1'          => 'chess-garden.jpg',
-        'Échecs 2'          => 'chess-landscape.jpg',
-        'DC Comics'         => 'dc-comics.jpg',
-        'Mario Geek'        => 'mario.jpg',
-        'Marvel'            => 'marvel.jpg',
-        'Lac et Montagne'   => 'mountain.jpg',
-        'Pacman'            => 'pacman.jpg',
-        'Poker'             => 'poker-dog.jpg',
-        'Neige'             => 'snow.jpg',
-        'Star Wars'         => 'star-wars.jpg',
-        'Coucher de soleil' => 'sun.jpg',
-        'Tyrannosaure'      => 't-rex.jpg',
-        'Business'          => 'zzz.jpg'
+        'Années 90'           => '90s.jpg',
+        'Astérix et Obélix'   => 'asterix.jpg',
+        'Autre Monde'         => 'autre-monde.jpg',
+        'Plage'               => 'beach.jpg',
+        'Échecs 1'            => 'chess-garden.jpg',
+        'Échecs 2'            => 'chess-landscape.jpg',
+        'DC Comics'           => 'dc-comics.jpg',
+        'Lune en mer de nuit' => 'lune-mer-nuit.jpg',
+        'Lucky Luke'          => 'lucky-luke.jpg',
+        'Mario Geek'          => 'mario.jpg',
+        'Marvel'              => 'marvel.jpg',
+        'Lac et Montagne'     => 'mountain.jpg',
+        'Pacman'              => 'pacman.jpg',
+        'Poker'               => 'poker-dog.jpg',
+        'Neige'               => 'snow.jpg',
+        'Star Wars'           => 'star-wars.jpg',
+        'Coucher de soleil'   => 'sun.jpg',
+        'Tyrannosaure'        => 't-rex.jpg',
+        'Fusée Tintin'        => 'tintin-lune.jpg',
+        'Business'            => 'zzz.jpg'
     ];
 
     // FORGOT PASSWORD
