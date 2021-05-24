@@ -22,6 +22,7 @@
                     <h5 class="card-title">Profil</h5>
                     <p class="card-text">
                         Utilisateur : {{ app.user.username }}<br>
+                        Email : {{ app.user.email }}<br>
                         Type de compte : {% if app.user.role == 'ROLE_ADMIN' %}Administrateur{% else %}Utilisateur{% endif %}<br>
                         Compte créé le <i class="font-italic">{{ app.user.createdAt ? app.user.createdAt|date('d/m/Y à H:i:s') : '' }}</i>
                     </p>

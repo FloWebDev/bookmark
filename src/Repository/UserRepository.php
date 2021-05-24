@@ -36,30 +36,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    /**
-     * Permet de compter le nombre de lignes dont la valeur est présente dans le champ fourni en paramètre
-     * 
-     * @param $field Champ dans lequel est fait la recherche
-     * @param $value Valeur à rechercher dans le champ
-     * @return int Nombre de lignes
-     */
-    public function findByLike(string $field, string $value)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "PRAGMA case_sensitive_like=OFF;";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-
-        return $this->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
-            ->where('u.' . $field . ' LIKE :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

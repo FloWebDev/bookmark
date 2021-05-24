@@ -3,12 +3,10 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Util\Captcha;
 use App\Constant\Constant;
 use App\Validator\CaptchaConstraint;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use App\Validator\UniqueCaseInsensitive;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
@@ -45,12 +44,10 @@ class UserType extends AbstractType
                         'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
                     ]),
                     new Length([
+                        'min'        => 5,
                         'max'        => 60,
+                        'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                         'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
-                    ]),
-                    new UniqueCaseInsensitive([
-                        'field'        => 'username',
-                        'currentValue' => $builder->getData()->getUsername()
                     ])
                 ]
             ])
@@ -67,10 +64,6 @@ class UserType extends AbstractType
                     new Email([
                         'mode'    => 'loose',
                         'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
-                    ]),
-                    new UniqueCaseInsensitive([
-                        'field'        => 'email',
-                        'currentValue' => $builder->getData()->getEmail()
                     ])
                 ]
             ])->addEventListener(
@@ -97,6 +90,11 @@ class UserType extends AbstractType
                                     'max'        => 64,
                                     'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                                     'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ]),
+                                new Regex([
+                                    'pattern' => '/^[\S]+$/',
+                                    'match'   => true,
+                                    'message' => Constant::CONSTRAINT_REGEX_PASSWORD
                                 ])
                             ]
                         ])->add('captcha', IntegerType::class, [
@@ -177,6 +175,11 @@ class UserType extends AbstractType
                                     'max'        => 64,
                                     'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                                     'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ]),
+                                new Regex([
+                                    'pattern' => '/^[\S]+$/',
+                                    'match'   => true,
+                                    'message' => Constant::CONSTRAINT_REGEX_PASSWORD
                                 ])
                             ]
                         ]);

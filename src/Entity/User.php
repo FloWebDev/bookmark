@@ -7,12 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`app_user`")
+ * @UniqueEntity("username", message="Identifiant déjà utilisé")
+ * @UniqueEntity("email", message="Email déjà utilisé")
+ * @UniqueEntity("slug", message="Slug déjà utilisé")
  */
 class User implements UserInterface, EquatableInterface
 {
@@ -25,6 +30,11 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Zà-źÀ-Ź0-9]+$/",
+     *     match=true,
+     *     message="L'identifiant est constitué de lettres et chiffres uniquement"
+     * )
      */
     private $username;
 
@@ -40,7 +50,7 @@ class User implements UserInterface, EquatableInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, unique=true)
      */
     private $slug;
 
@@ -161,7 +171,7 @@ class User implements UserInterface, EquatableInterface
 
     public function setEmail(?string $email): self
     {
-        $this->email = $email;
+        $this->email = mb_strtolower($email);
 
         return $this;
     }

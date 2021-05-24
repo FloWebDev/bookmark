@@ -68,6 +68,7 @@ class Constant
     const CONSTRAINT_MESSAGE_MIN_LENGTH            = 'Nombre de caractères minimum attendu : ';
     const CONSTRAINT_MESSAGE_MAX_LENGTH            = 'Nombre de caractères maximum attendu : ';
     const CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD = 'Les champs du mot de passe doivent correspondre';
+    const CONSTRAINT_REGEX_PASSWORD                = 'Le mot de passe ne doit pas contenir d\'espace';
     const CAPTCHA_LABEL                            = 'Renseignez les chiffres présents dans l\'image (*)';
 
     const ERROR_NO_MATCHING_USER = 'Aucun utilisateur correspondant.';
