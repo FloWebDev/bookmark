@@ -49,16 +49,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $sql = "PRAGMA case_sensitive_like=OFF;";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
-// if($field == 'email') {
-    dump($value);
-    // dd($this->createQueryBuilder('u')
-    //         ->select('COUNT(u.id)')
-    //         ->where('u.' . $field . ' LIKE :val')
-    //         ->setParameter('val', $value)
-    //         ->orderBy('u.id', 'ASC')
-    //         ->getQuery()
-    //         ->getSingleScalarResult());
-// }
+
         return $this->createQueryBuilder('u')
             ->select('COUNT(u.id)')
             ->where('u.' . $field . ' LIKE :val')

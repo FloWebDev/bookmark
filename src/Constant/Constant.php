@@ -7,7 +7,7 @@ class Constant
     // HTTP Code Messages
     const FORBIDDEN        = 'Accès refusé/interdit'; // 403
     const UNAUTHORIZED     = 'Action non autorisée'; // 401
-    const NOT_FOUND        = 'Ressource introuvable'; // 404
+    const NOT_FOUND        = 'La ressource demandée n\'existe pas ou a été déplacée'; // 404
     const NO_RECORDS_FOUND = 'Aucun élément trouvé.';
 
     const HELP_EMAIL_MESSAGE           = 'L\'adresse email ne sera ni revendue ni communiquée à un tiers.';

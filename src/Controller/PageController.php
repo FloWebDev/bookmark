@@ -64,15 +64,17 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{user_id}/order/{z}', name: 'page_show', methods: ['GET'])]
-    /**
-     * @ParamConverter("page", options={"mapping": {"user_id": "user", "z": "z"}})
-     */
-    public function show(Page $page, Request $request, SessionInterface $session): Response
+    #[Route('/{slug}/{z}', name: 'page_show', methods: ['GET'])]
+    public function show($slug, $z, Request $request, SessionInterface $session, PageRepository $pageRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $page = $pageRepository->findOneBySlugAndOrder($slug, $z);
 
-        if (!$this->getUser() || ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+        if (!$page) {
+            throw $this->createNotFoundException(Constant::NOT_FOUND);
+        }
+
+        if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
             $this->addFlash(
                 'danger',
                 Constant::FORBIDDEN

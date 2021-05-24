@@ -20,39 +20,16 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-    /**
-    * @return Page[] Returns an array of Page objects
-    */
-    public function findByUser(User $user)
+    public function findOneBySlugAndOrder(string $slug, int $z): ?Page
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('p.z', 'ASC')
+            ->join('p.user', 'u')
+            ->where('u.slug = :slug')
+            ->andWhere('p.z = :z')
+            ->setParameter('slug', $slug)
+            ->setParameter('z', $z)
             ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-    * @return Page[] Returns an array of Page objects
-    */
-    public function refreshOrderZ(int $userId, int $z, string $direction)
-    {
-        if ($direction === 'UP') {
-            // UP
-            $sql  = "UPDATE App\Entity\Page p SET p.z = 
-        (case when p.z < $z then (p.z - 1) else (p.z + 1) end)
-        WHERE p.user = $userId";
-        } else {
-            // DOWN
-            $sql  = "UPDATE App\Entity\Page p SET p.z = 
-        (case when p.z <= $z then (p.z - 1) else (p.z + 1) end)
-        WHERE p.user = $userId";
-        }
-
-        $stmt = $this->getEntityManager()->createQuery($sql);
-        return $stmt->execute([]);
+            ->getOneOrNullResult();
     }
 
     // /**

@@ -27,16 +27,17 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'));
         $admin->setRole('ROLE_ADMIN');
         $admin->setEmail('admin@admin.io');
+        $admin->setSlug('aaa');
         $admin->setWallpaper('pacman.jpg');
         $manager->persist($admin);
 
-        // POUR ADMIN
         // Création d'un utilisateur
         $user = new User();
         $user->setUsername('user');
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'user'));
         $user->setRole('ROLE_USER');
         $user->setEmail('user@user.io');
+        $user->setSlug('bbb');
         $user->setWallpaper('chess-landscape.jpg');
         $manager->persist($user);
 

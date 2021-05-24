@@ -104,7 +104,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         // Redirection dépend de la présence ou non d'une première page
         if (count($this->security->getUser()->getPages()) > 0) {
             return new RedirectResponse($this->urlGenerator->generate('page_show', [
-                'user_id' => $this->security->getUser()->getId(),
+                'slug' => $this->security->getUser()->getSlug(),
                 'z'       => 1 // page classée en 1ère position
             ]));
         }

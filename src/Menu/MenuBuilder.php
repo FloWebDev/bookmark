@@ -27,12 +27,15 @@ class MenuBuilder
     {
         $menu = $this->factory->createItem('root');
 
-        $pages = $this->pageRepository->findByUser($this->security->getUser());
+        $pages = $this->pageRepository->findBy([
+            'user' => $this->security->getUser()], [
+                'z' => 'ASC'
+            ]);
 
         if ($pages) {
             foreach ($pages as $page) {
                 $menu->addChild($page->getTitle(), ['route' => 'page_show', 'routeParameters' => [
-                    'user_id' => $page->getUser()->getId(),
+                    'slug' => $page->getUser()->getSlug(),
                     'z'       => $page->getZ()
                 ]]);
             }

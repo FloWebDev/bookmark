@@ -42,6 +42,11 @@ class User implements UserInterface, EquatableInterface
     /**
      * @ORM\Column(type="string", length=32)
      */
+    private $slug;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
     private $role;
 
     /**
@@ -68,6 +73,7 @@ class User implements UserInterface, EquatableInterface
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->slug       = str_replace('.', '', uniqid('BM', true));
         $this->pages      = new ArrayCollection();
         $this->wallpaper  = Constant::WALLPAPERS['Business'];
     }
@@ -156,6 +162,18 @@ class User implements UserInterface, EquatableInterface
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
