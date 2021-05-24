@@ -26,12 +26,13 @@ class Constant
     const SUBMIT_ACTION   = 'Valider';
     const CANCEL_ACTION   = 'Fermer';
      
-    const DASHBOARD_SENTENCE      = 'Tout le contenu de votre page !';
-    const SUCCESS_ACTION          = 'Action réalisée avec succès';
-    const ACCOUNT_SETTINGS        = 'Paramètres du compte';
-    const LIST_CREATE_FORM_TITLE  = 'Création d\'une liste';
-    const LIST_UPDATE_FORM_TITLE  = 'Modification de la liste : ';
-    const ITEM_UPDATE_FORM_TITLE  = 'Modification item : ';
+    const DASHBOARD_SENTENCE     = 'Tout le contenu de votre page !';
+    const SUCCESS_ACTION         = 'Action réalisée avec succès';
+    const SUCCESS_SIGN_UP        = 'Inscription validée';
+    const ACCOUNT_SETTINGS       = 'Paramètres du compte';
+    const LIST_CREATE_FORM_TITLE = 'Création d\'une liste';
+    const LIST_UPDATE_FORM_TITLE = 'Modification de la liste : ';
+    const ITEM_UPDATE_FORM_TITLE = 'Modification item : ';
 
     const ITEM_CREATE_FORM_TITLE = 'Ajout d\'un favori';
 
@@ -67,12 +68,12 @@ class Constant
     const CONSTRAINT_MESSAGE_MIN_LENGTH            = 'Nombre de caractères minimum attendu : ';
     const CONSTRAINT_MESSAGE_MAX_LENGTH            = 'Nombre de caractères maximum attendu : ';
     const CONSTRAINT_MESSAGE_CONFIRMATION_PASSWORD = 'Les champs du mot de passe doivent correspondre';
-    const CAPTCHA_LABEL = 'Renseignez les chiffres présents dans l\'image (*)';
+    const CAPTCHA_LABEL                            = 'Renseignez les chiffres présents dans l\'image (*)';
 
     const ERROR_NO_MATCHING_USER = 'Aucun utilisateur correspondant.';
 
     const EMAIL_SEND_SUCCESS = 'Email envoyé avec succès';
-    const EMAIL_SEND_ERROR = 'Erreur dans l\'envoi de l\'email.';
+    const EMAIL_SEND_ERROR   = 'Erreur dans l\'envoi de l\'email.';
 
     // Wallpapers
     const WALLPAPERS_TITLE = 'Fonds d\'écran';
@@ -97,6 +98,6 @@ class Constant
 
     // FORGOT PASSWORD
     const EMAIL_FORGOT_PASSWORD_SUBJECT = 'Nouveau mot de passe (provisoire)';
-    const EMAIL_FORGOT_PASSWORD_TEXT = 'Bonjour, / Suite à votre demande, voici votre nouveau mot de passe : [NEW_PASSWORD] Important : modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion. / À bientôt.';
-    const EMAIL_FORGOT_PASSWORD_HTML = '<p>Bonjour,<br><br>Suite à votre demande, voici votre nouveau mot de passe : <b>[NEW_PASSWORD]</b><br><b>Important :</b> modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion.<br><br>À bientôt.</p>';
+    const EMAIL_FORGOT_PASSWORD_TEXT    = 'Bonjour, / Suite à votre demande, voici votre nouveau mot de passe : [NEW_PASSWORD] Important : modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion. / À bientôt.';
+    const EMAIL_FORGOT_PASSWORD_HTML    = '<p>Bonjour,<br><br>Suite à votre demande, voici votre nouveau mot de passe : <b>[NEW_PASSWORD]</b><br><b>Important :</b> modifiez le mot de passe dans les paramètres de votre compte dès votre prochaine connexion.<br><br>À bientôt.</p>';
 }

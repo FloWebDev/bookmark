@@ -44,7 +44,7 @@ class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                Constant::SUCCESS_ACTION
+                Constant::SUCCESS_SIGN_UP
             );
 
             return $this->redirectToRoute('app_login');
