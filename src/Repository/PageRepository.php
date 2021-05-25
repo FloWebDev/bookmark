@@ -20,6 +20,14 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
+    /**
+     * Permet d'obtenir la page associée à un utilisateur en fonction de son slug et de l'ordre d'affichage de la page
+     * 
+     * @param string $slug Le slug de l'utilisateur
+     * @param int $z L'ordre d'affichage de la page
+     *
+     * @return mixed La page concernée ou null
+     */
     public function findOneBySlugAndOrder(string $slug, int $z): ?Page
     {
         return $this->createQueryBuilder('p')

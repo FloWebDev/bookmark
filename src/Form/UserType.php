@@ -45,7 +45,7 @@ class UserType extends AbstractType
                     ]),
                     new Length([
                         'min'        => 5,
-                        'max'        => 60,
+                        'max'        => 30,
                         'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
                         'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                     ])
@@ -64,6 +64,12 @@ class UserType extends AbstractType
                     new Email([
                         'mode'    => 'loose',
                         'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
+                    ]),
+                    new Length([
+                        'min'        => 5,
+                        'max'        => 250,
+                        'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                     ])
                 ]
             ])->addEventListener(
@@ -142,6 +148,12 @@ class UserType extends AbstractType
                                 new Email([
                                     'mode'    => 'loose',
                                     'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
+                                ]),
+                                new Length([
+                                    'min'        => 5,
+                                    'max'        => 250,
+                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
                                 ])
                             ]
                         ])->add('captcha', IntegerType::class, [

@@ -41,6 +41,7 @@ class AppFixtures extends Fixture
         $user->setWallpaper('chess-landscape.jpg');
         $manager->persist($user);
 
+        // POUR ADMIN
         // Création des pages
         $pages = [];
         for ($i = 0; $i < 6; $i++) {

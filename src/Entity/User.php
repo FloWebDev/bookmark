@@ -29,7 +29,7 @@ class User implements UserInterface, EquatableInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=32, unique=true)
      * @Assert\Regex(
      *     pattern="/^[a-zA-Zà-źÀ-Ź0-9]+$/",
      *     match=true,
@@ -70,7 +70,7 @@ class User implements UserInterface, EquatableInterface
     private $connected_at;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="string", length=32, nullable=true)
      */
     private $wallpaper;
 
