@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/gallery.css') }}{{ assets_version }}">
 {% endblock %}
 
-{% block title %}{{ Constant.PAGES_LIST_INDEX }}{% endblock %}
+{% block title %}{{ Constant.DASHBOARD }}{% endblock %}
 
 {% block body %}
 <div class="col-12 m-0 p-0" id="dashboardContainer">
@@ -21,10 +21,10 @@
                 <div class="card-body">
                     <h5 class="card-title">Profil</h5>
                     <p class="card-text">
-                        Utilisateur : {{ app.user.username }}<br>
+                        Identifiant : {{ app.user.username }}<br>
                         Email : {{ app.user.email }}<br>
                         Type de compte : {% if app.user.role == 'ROLE_ADMIN' %}Administrateur{% else %}Utilisateur{% endif %}<br>
-                        Compte créé le <i class="font-italic">{{ app.user.createdAt ? app.user.createdAt|date('d/m/Y à H:i:s') : '' }}</i>
+                        Inscription le <i class="font-italic">{{ app.user.createdAt ? app.user.createdAt|date('d/m/Y') : '' }}</i>
                     </p>
                     <a class="btn btn-dark bg-dark" href="{{ path('user_edit', {id: app.user.id}) }}"><i class="fas fa-user"></i> {{ Constant.USER_UPDATE_LABEL_BIS }}</a>
                     {% if app.user.role == 'ROLE_ADMIN' %}

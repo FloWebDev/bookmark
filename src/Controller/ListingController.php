@@ -6,7 +6,6 @@ use App\Entity\Listing;
 use App\Form\ListingType;
 use App\Constant\Constant;
 use App\Util\OrderService;
-use App\Repository\ListingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,14 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/listing')]
 class ListingController extends AbstractController
 {
-    #[Route('/', name: 'listing_index', methods: ['GET'])]
-    public function index(ListingRepository $listingRepository): Response
-    {
-        return $this->render('listing/index.html.twig', [
-            'listings' => $listingRepository->findAll(),
-        ]);
-    }
-
     #[Route('/new', name: 'listing_new', methods: ['GET', 'POST'])]
     public function new(Request $request, OrderService $orderService): Response
     {
@@ -43,6 +34,13 @@ class ListingController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                if (!$this->getUser() || $listing->getPage()->getUser()->getId() !== $this->getUser()->getId()) {
+                    return $this->json([
+                        'success'   => false,
+                        'msg'       => Constant::FORBIDDEN
+                    ], 403);
+                }
+
                 $entityManager = $this->getDoctrine()->getManager();
                 if ($form->get('position')->getData() === 'end') {
                     $listing->setZ(count($listing->getPage()->getListings()) + 2);
@@ -71,14 +69,6 @@ class ListingController extends AbstractController
         }
     }
 
-    #[Route('/{id}', name: 'listing_show', methods: ['GET'])]
-    public function show(Listing $listing): Response
-    {
-        return $this->render('listing/show.html.twig', [
-            'listing' => $listing,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'listing_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Listing $listing): Response
     {
@@ -101,6 +91,13 @@ class ListingController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                if (!$this->getUser() || $listing->getPage()->getUser()->getId() !== $this->getUser()->getId()) {
+                    return $this->json([
+                        'success'   => false,
+                        'msg'       => Constant::FORBIDDEN
+                    ], 403);
+                }
+
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->json([
@@ -124,18 +121,23 @@ class ListingController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             if ($request->isMethod('GET')) {
+                if (!$this->getUser() || $this->getUser()->getId() !== $listing->getPage()->getUser()->getId()) {
+                    return $this->json([
+                        'success' => false,
+                        'msg'     => Constant::FORBIDDEN
+                    ], 403);
+                }
+
                 return $this->json([
                     'success'   => null,
                     'title'     => Constant::LIST_DELETE_MODAL_TITLE . $listing->getTitle(),
                     'alert'     => Constant::LIST_DELETE_MODAL_ALERT,
                     'form'      => $this->renderView('listing/_delete_form.html.twig', [
-
                         'listing' => $listing
                     ])
                 ]);
             } elseif ($request->isMethod('POST')) {
-                if (!$this->getUser() || ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()
-            && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+                if (!$this->getUser() || $this->getUser()->getId() !== $listing->getPage()->getUser()->getId()) {
                     return $this->json([
                         'success' => false,
                         'msg'     => Constant::FORBIDDEN
@@ -162,8 +164,7 @@ class ListingController extends AbstractController
     public function order($direction, Request $request, Listing $listing, OrderService $orderService): Response
     {
         if ($request->isXmlHttpRequest()) {
-            if (!$this->getUser() || ($this->getUser()->getId() !== $listing->getPage()->getUser()->getId()
-                    && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+            if (!$this->getUser() || $this->getUser()->getId() !== $listing->getPage()->getUser()->getId()) {
                 return $this->json([
                     'success' => false,
                     'msg'     => Constant::FORBIDDEN

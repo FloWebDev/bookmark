@@ -17,16 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 #[Route('/page')]
 class PageController extends AbstractController
 {
-    #[Route('/', name: 'page_index', methods: ['GET'])]
-    public function index(PageRepository $pageRepository): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return $this->render('page/index.html.twig', [
-            'pageTitle' => Constant::PAGES_LIST_INDEX,
-            'pages'     => $this->getUser()->getPages()
-        ]);
-    }
-
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
     public function new(Request $request, OrderService $orderService): Response
     {
@@ -71,7 +61,7 @@ class PageController extends AbstractController
         $page = $pageRepository->findOneBySlugAndOrder($slug, $z);
 
         if (!$page) {
-            throw $this->createNotFoundException(Constant::NOT_FOUND);
+            throw $this->createNotFoundException(Constant::NOT_FOUND); // 404
         }
 
         if ($this->getUser()->getId() !== $page->getUser()->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
@@ -115,6 +105,14 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->getUser()->getId() !== $page->getUser()->getId()) {
+                $this->addFlash(
+                    'danger',
+                    Constant::FORBIDDEN
+                );
+                return $this->redirectToRoute('dashboard');
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash(
@@ -131,7 +129,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'page_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/delete', name: 'page_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -164,8 +162,7 @@ class PageController extends AbstractController
     public function order($direction, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if (!$this->getUser() || ($this->getUser()->getId() !== $page->getUser()->getId()
-                    && $this->getUser()->getRole() !== 'ROLE_ADMIN')) {
+        if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             return $this->json([
                 'success' => false,
                 'msg'     => Constant::FORBIDDEN

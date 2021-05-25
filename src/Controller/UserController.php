@@ -31,6 +31,7 @@ class UserController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $encoder, CaptchaService $captchaService): Response
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -51,9 +52,9 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/new.html.twig', [
-            'user' => $user,
+            'user'    => $user,
             'captcha' => $captchaService->createCaptcha(),
-            'form' => $form->createView(),
+            'form'    => $form->createView(),
         ]);
     }
 
@@ -74,6 +75,14 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->getUser()->getId() !== $user->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
+                $this->addFlash(
+                    'danger',
+                    Constant::FORBIDDEN
+                );
+                return $this->redirectToRoute('dashboard');
+            }
+
             if (!is_null($form->get('password')->getData())) {
                 $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
             }
