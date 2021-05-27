@@ -25,4 +25,4 @@ L'application permet d'enregistrer des favoris avec des notes associées (ou des
 
 ### Pour la BDD
 
-SQLite
+* SQLite
