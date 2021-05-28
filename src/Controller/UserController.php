@@ -9,10 +9,17 @@ use App\Util\MailService;
 use App\Constant\Constant;
 use App\Util\CaptchaService;
 use App\Repository\UserRepository;
+use App\Validator\CaptchaConstraint;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -135,19 +142,18 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_ANONYMOUS');
 
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user, [
-            'context' => 'forgot_password'
-        ]);
+        $form = $this->createForgotPasswordForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userTarget = $userRepository->findOneBy([
-                'username' => $user->getUsername(),
-                'email'    => $user->getEmail()
+            $data = $form->getData();
+            $user = $userRepository->findOneBy([
+                'username' => $data['username'],
+                'email'    => $data['email']
             ]);
 
-            if (is_null($userTarget)) {
+            if (is_null($user)) {
                 $form->addError(new FormError(Constant::ERROR_NO_MATCHING_USER));
                 return $this->render('user/forgot_password.html.twig', [
                     'captcha' => $captchaService->createCaptcha(),
@@ -156,10 +162,10 @@ class UserController extends AbstractController
             }
 
             $newPassword = uniqid();
-            $userTarget->setPassword($encoder->encodePassword($userTarget, $newPassword));
+            $user->setPassword($encoder->encodePassword($user, $newPassword));
             $this->getDoctrine()->getManager()->flush();
 
-            (array) $res = $emailService->sendEmail($userTarget->getEmail(), Constant::EMAIL_FORGOT_PASSWORD_SUBJECT, str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_TEXT), str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_HTML));
+            (array) $res = $emailService->sendEmail($user->getEmail(), Constant::EMAIL_FORGOT_PASSWORD_SUBJECT, str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_TEXT), str_replace('[NEW_PASSWORD]', $newPassword, Constant::EMAIL_FORGOT_PASSWORD_HTML));
 
             $this->addFlash(
                 $res['success'] ? 'success' : 'danger',
@@ -175,5 +181,60 @@ class UserController extends AbstractController
         ]);
 
         return $this->redirectToRoute('dashboard');
+    }
+
+    private function createForgotPasswordForm()
+    {
+        return $this->createFormBuilder(null, ['method' => 'POST'])
+            ->add('username', TextType::class, [
+                'label'       => 'Identifiant (*)',
+                'attr'        => ['placeholder' => 'Identifiant'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                    ]),
+                    new Length([
+                        'max'        => 60,
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                    ])
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email (*)',
+                'help'  => Constant::HELP_FORGOT_PASSWORD_MESSAGE,
+                'attr'  => [
+                    'placeholder' => 'exemple@gmail.com'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                    ]),
+                    new Email([
+                        'mode'    => 'loose',
+                        'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
+                    ]),
+                    new Length([
+                        'min'        => 5,
+                        'max'        => 250,
+                        'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                    ])
+                ]
+            ])->add('captcha', IntegerType::class, [
+                'label'       => Constant::CAPTCHA_LABEL,
+                'mapped'      => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                    ]),
+                    new Length([
+                        'min'        => 4,
+                        'max'        => 4,
+                        'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                        'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                    ]),
+                    new CaptchaConstraint()
+                ]
+            ])->getForm();
     }
 }

@@ -119,59 +119,6 @@ class UserType extends AbstractType
                                 new CaptchaConstraint()
                             ]
                         ]);
-                    } elseif (is_null($user->getId()) && $this->options['context'] === 'forgot_password') {
-                        // Dans le cas d'un mot de passe oublié
-                        $form->remove('username')->remove('email')
-                        ->add('username', TextType::class, [
-                            'label'       => 'Identifiant (*)',
-                            'attr'        => ['placeholder' => 'Identifiant'],
-                            'constraints' => [
-                                new NotBlank([
-                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
-                                ]),
-                                new Length([
-                                    'max'        => 60,
-                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
-                                ])
-                            ]
-                        ])
-                        ->add('email', EmailType::class, [
-                            'label' => 'Email (*)',
-                            'help'  => Constant::HELP_FORGOT_PASSWORD_MESSAGE,
-                            'attr'  => [
-                                'placeholder' => 'exemple@gmail.com'
-                            ],
-                            'constraints' => [
-                                new NotBlank([
-                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
-                                ]),
-                                new Email([
-                                    'mode'    => 'loose',
-                                    'message' => Constant::CONSTRAINT_MESSAGE_INVALID_EMAIL
-                                ]),
-                                new Length([
-                                    'min'        => 5,
-                                    'max'        => 250,
-                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
-                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
-                                ])
-                            ]
-                        ])->add('captcha', IntegerType::class, [
-                            'label'       => Constant::CAPTCHA_LABEL,
-                            'mapped'      => false,
-                            'constraints' => [
-                                new NotBlank([
-                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
-                                ]),
-                                new Length([
-                                    'min'        => 4,
-                                    'max'        => 4,
-                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
-                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
-                                ]),
-                                new CaptchaConstraint()
-                            ]
-                        ]);
                     } else {
                         // Dans le cas d'un update
                         $form->add('password', RepeatedType::class, [
