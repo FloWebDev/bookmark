@@ -25,7 +25,6 @@ use Symfony\Component\Validator\Constraints\Regex;
 class UserType extends AbstractType
 {
     private $security;
-    private $options;
 
     public function __construct(Security $security)
     {
@@ -34,7 +33,6 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->options = $options;
         $builder
             ->add('username', TextType::class, [
                 'label'       => 'Identifiant (*)',
@@ -78,7 +76,7 @@ class UserType extends AbstractType
                     $user = $event->getData();
                     $form = $event->getForm();
 
-                    if (is_null($user->getId()) && empty($this->options['context'])) {
+                    if (is_null($user->getId())) {
                         // Dans le cas d'un create
                         $form->add('password', RepeatedType::class, [
                             'type'            => PasswordType::class,
@@ -177,8 +175,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
-            'context'    => null
+            'data_class' => User::class
         ]);
     }
 }
