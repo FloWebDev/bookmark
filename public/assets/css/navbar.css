@@ -2,3 +2,7 @@ nav {
     border-radius: 5px;
     background-color: var(--main-bg-color);
 }
+
+#webInfo {
+    cursor: grab;
+}
