@@ -51,6 +51,11 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(type="string", length=32, unique=true)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9]+$/",
+     *     match=true,
+     *     message="Le slug est constitué de lettres sans accent et chiffres uniquement"
+     * )
      */
     private $slug;
 

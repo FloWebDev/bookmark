@@ -12,6 +12,7 @@
         {% endif %}
 
         {% if app.user and app.user.role == 'ROLE_ADMIN' and app.user.id != user.id %}
+            {{ form_row(form.slug) }}
             {{ form_row(form.role) }}
         {% endif %}
 

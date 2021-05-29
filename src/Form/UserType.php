@@ -154,6 +154,19 @@ class UserType extends AbstractType
                             ],
                             'expanded' => false,
                             'multiple' => false
+                        ])->add('slug', TextType::class, [
+                            'label'       => 'Slug (*)',
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => Constant::CONSTRAINT_MESSAGE_NOT_BLANK
+                                ]),
+                                new Length([
+                                    'min'        => 3,
+                                    'max'        => 30,
+                                    'minMessage' => Constant::CONSTRAINT_MESSAGE_MIN_LENGTH . '{{ limit }}',
+                                    'maxMessage' => Constant::CONSTRAINT_MESSAGE_MAX_LENGTH . '{{ limit }}'
+                                ])
+                            ]
                         ]);
                     }
                 }

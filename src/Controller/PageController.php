@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/page')]
 class PageController extends AbstractController
@@ -54,7 +53,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}/{z}', name: 'page_show', methods: ['GET'])]
+    #[Route('/{slug}/{z}', name: 'page_show', methods: ['GET'], requirements: ['slug' => '\w+', 'z' => '\d+'])]
     public function show($slug, $z, Request $request, SessionInterface $session, PageRepository $pageRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -89,7 +88,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Page $page): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -158,7 +157,7 @@ class PageController extends AbstractController
         return $this->redirectToRoute('dashboard');
     }
 
-    #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'])]
+    #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'], requirements: ['id' => '\d+', 'direction' => '\w+'])]
     public function order($direction, Page $page, OrderService $orderService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
