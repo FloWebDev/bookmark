@@ -43,4 +43,9 @@ Une fois le serveur Apache/Nginx configuré pour le projet :
 * Ajouter la ligne `MAILER_DSN=smtp://user:password@ssl0.ovh.net:999` en modifiant l'identifiant, le mot de passe et le port avec votre configuration SMTP.
 * Modifier au besoin les lignes présentes dans la section `Divers`.
 
-### Effectuer la commande `php bin/console cache:clear`
+### Effectuer les commandes suivantes :
+
+* `php bin/console doc:dat:crea`
+* `php bin/console doc:mig:mig`
+* `php bin/console app:create:admin` (crée le 1er utilisateur avec un rôle administrateur)
+* `php bin/console cache:clear`
