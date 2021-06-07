@@ -68,7 +68,7 @@ class UserController extends AbstractController
     #[Route('user/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($this->getUser()->getId() !== $user->getId() && $this->getUser()->getRole() !== 'ROLE_ADMIN') {
             $this->addFlash(

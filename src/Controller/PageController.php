@@ -19,7 +19,7 @@ class PageController extends AbstractController
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
     public function new(Request $request, OrderService $orderService): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $page = new Page();
         $form = $this->createForm(PageType::class, $page);
@@ -56,7 +56,7 @@ class PageController extends AbstractController
     #[Route('/{slug}/{z}', name: 'page_show', methods: ['GET'], requirements: ['slug' => '\w+', 'z' => '\d+'])]
     public function show($slug, $z, Request $request, SessionInterface $session, PageRepository $pageRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $page = $pageRepository->findOneBySlugAndOrder($slug, $z);
 
         if (!$page) {
@@ -91,7 +91,7 @@ class PageController extends AbstractController
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Page $page): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             $this->addFlash(
                 'danger',
@@ -131,7 +131,7 @@ class PageController extends AbstractController
     #[Route('/{id}/delete', name: 'page_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Page $page, OrderService $orderService): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             $this->addFlash(
                 'danger',
@@ -160,7 +160,7 @@ class PageController extends AbstractController
     #[Route('/{id}/order/{direction}', name: 'page_order', methods: ['GET'], requirements: ['id' => '\d+', 'direction' => '\w+'])]
     public function order($direction, Page $page, OrderService $orderService): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($this->getUser()->getId() !== $page->getUser()->getId()) {
             return $this->json([
                 'success' => false,
