@@ -74,18 +74,8 @@
     </table>
 
     <h2 class="text-light col-12 p-0">{{ Constant.WALLPAPERS_TITLE }}</h2>
-    <div id="gallery">
-        {% for label, wallpaper in Constant.WALLPAPERS %}
-        {% set url = asset('assets/wallpapers/' ~ wallpaper) %}
-            <div class="picture {% if app.user.wallpaper == wallpaper %}active{% endif %}" 
-                title="{{ label }}"
-                alt="{{ wallpaper }}"
-                style="background-image: url('{{ url }}');"
-                data-wallpaper="{{ wallpaper }}">
-            </div>
-            
-        {% endfor %}
-    </div>
+        {# Mise en cache du template #}
+        {{ gallery_template|raw }}
     
 </div>
 {% endblock %}

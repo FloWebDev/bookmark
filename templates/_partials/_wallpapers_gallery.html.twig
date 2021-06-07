@@ -1,0 +1,11 @@
+<div id="gallery">
+    {% for label, wallpaper in Constant.WALLPAPERS %}
+    {% set url = asset('assets/wallpapers/' ~ wallpaper) %}
+        <div class="picture {% if app.user.wallpaper == wallpaper %}active{% endif %}" 
+            title="{{ label }}"
+            alt="{{ wallpaper }}"
+            style="background-image: url('{{ url }}');"
+            data-wallpaper="{{ wallpaper }}">
+        </div>
+    {% endfor %}
+</div>
